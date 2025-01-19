@@ -7,10 +7,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException, TimeoutException
 import time
+import requests
 
 def setup_driver():
     chrome_options = webdriver.ChromeOptions()
-    prefs = {"download.default_directory": "/path/to/your/download/folder"}
+    prefs = {"download.default_directory": "path/to/download/folder"}   # Change the path as needed
     chrome_options.add_experimental_option("prefs", prefs)
     return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
@@ -39,47 +40,65 @@ def click_with_retry(driver, element):
         driver.execute_script("arguments[0].scrollIntoView(true);", element)  # Ensure visibility
         driver.execute_script("arguments[0].click();", element)  # Use JavaScript click as a fallback
 
+def download_pdf(pdf_url, save_path):
+    """Download a PDF file from a URL and save it to the specified path."""
+    response = requests.get(pdf_url)
+    with open(save_path, 'wb') as file:
+        file.write(response.content)
+    print(f"PDF downloaded successfully and saved to {save_path}")
+
 def download_project_report():
     driver = setup_driver()
     try:
-        # Open the World Bank Projects page
-        driver.get("https://projects.worldbank.org/en/projects-operations/projects-home")
-        driver.maximize_window()
+        # List of project IDs
+        project_ids = ["P050658", "P082308"]
 
-        # Search for the project ID
-        search_box = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "qterm")))
-        project_id = "P050658"
-        search_box.send_keys(project_id)
-        search_box.send_keys(Keys.RETURN)
+        for project_id in project_ids:
+            # Open the World Bank Projects page
+            driver.get("https://projects.worldbank.org/en/projects-operations/projects-home")
 
-        # Click on the first project link
-        project_link = WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, "project-list-link"))
-        )[0]
-        click_with_retry(driver, project_link)
+            # Search for the project ID
+            search_box = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "qterm")))
+            search_box.clear()
+            search_box.send_keys(project_id)
+            search_box.send_keys(Keys.RETURN)
 
-        # Navigate to the "Documents" tab
-        documents_tab = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.ID, "documents_top"))
-        )
-        click_with_retry(driver, documents_tab)
+            # Click on the first project link
+            project_link = WebDriverWait(driver, 10).until(
+                EC.presence_of_all_elements_located((By.CLASS_NAME, "project-list-link"))
+            )[0]
+            click_with_retry(driver, project_link)
 
-        # Click on the first document link
-        first_document_link = WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located(
-                (By.XPATH, "//a[contains(@href, 'documents.worldbank.org/curated')]")
+            # Navigate to the "Documents" tab
+            documents_tab = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, "documents_top"))
             )
-        )[0]
-        click_with_retry(driver, first_document_link)
+            click_with_retry(driver, documents_tab)
 
-        # Locate the "Official PDF" link
-        official_pdf_link = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//a[contains(text(), 'Official PDF')]"))
-        )
-        click_with_retry(driver, official_pdf_link)
+            # Click on the first document link
+            first_document_link = WebDriverWait(driver, 10).until(
+                EC.presence_of_all_elements_located(
+                    (By.XPATH, "//a[contains(@href, 'documents.worldbank.org/curated')]")
+                )
+            )[0]
+            click_with_retry(driver, first_document_link)
 
-        print("PDF download initiated successfully!")
-        time.sleep(10)  # Wait for the download to complete
+            # Locate the "Official PDF" link
+            official_pdf_link = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//a[contains(text(), 'Official PDF')]"))
+            )
+            click_with_retry(driver, official_pdf_link)
+
+            print("PDF download initiated successfully!")
+
+            # Extract the URL and download PDF
+            pdf_url = official_pdf_link.get_attribute('href')
+            pdf_path = f"/path/to/Downloads/{project_id}_PAD.pdf"   # Change the path as needed
+            download_pdf(pdf_url, pdf_path)
+
+            time.sleep(10)  # Wait for the download to complete
+    
+        time.sleep(5)  # Wait for the last download to complete
     finally:
         driver.quit()
 
