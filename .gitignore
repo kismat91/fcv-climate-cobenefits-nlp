@@ -1,0 +1,37 @@
+# Ignore all files by default
+*
+
+# Allow specific file types and directories
+!requirements.txt
+!*.py
+!README.md
+!.gitignore
+
+# Allow specific directories (if needed)
+!your_project_folder/  # Replace with your actual project folder name
+
+# Ignore all PDF files
+*.pdf
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore Python cache and virtual environment
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore log files
+*.log
+
+# Ignore build and distribution files
+build/
+dist/
+*.egg-info/
