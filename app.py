@@ -447,9 +447,6 @@ def main():
         else:
             st.info("No usage history yet.")
 
-    # -----------------------
-    #  ABOUT TAB
-    # -----------------------
     with tabs[3]:
         st.header("About ℹ️")
         st.markdown("""
