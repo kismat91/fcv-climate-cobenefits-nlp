@@ -171,64 +171,60 @@ def analyze_with_gpt(document_text, selected_model, temperature=0.8, max_tokens=
     if client is None:
         return ("Error: OpenAI client not initialized. Please set your API key.", 0, 0, 0, 0, 0)
     instructions = """
-You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) using the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0-100) for each question and provide a detailed analysis to justify your score.
+You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a Yes, Partial, or No response for each question and provide a detailed analysis to justify your choice.
 Scoring System:
-•	90-100 = Exceptional: Comprehensive FCV integration with detailed risk analysis and mitigation strategies.
-•	75-89 = Strong: Well-addressed but may have some gaps in FCV consideration.
-•	50-74 = Moderate: References FCV risks but lacks full integration or depth.
-•	25-49 = Weak: Limited or indirect mention of FCV factors with minimal strategy.
-•	0-24 = Not Addressed: No mention of FCV issues in the PAD.
+•	Yes = The PAD explicitly and comprehensively incorporates FCV-sensitive measures aligned with the question.
+•	Partial = The PAD references the issue but in a limited, superficial, or indirect way, or lacks full coverage.
+•	No = There is no evidence in the PAD that the issue has been addressed.
 Output Format:
 For each characteristic, provide the following:
 1.	Guiding Question: [Question]
 o	Analysis: [Detailed analysis of how the PAD addresses the question]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 At the end, provide:
-•	Overall FCV Sensitivity Score: [Sum of scores for all questions]
-•	Summary: [Brief summary of the PAD’s FCV sensitivity]
+•	Overall FCV Sensitivity Assessment: [Summary of how well the PAD integrates FCV-sensitive measures]
 Evaluation Criteria
 Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
 1.	Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 2.	Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
+
 Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
 1.	Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 2.	Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 3.	Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
 1.	Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 2.	Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
 1.	Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 2.	Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
 1.	Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
+o	Score: [Yes/Partial/No]
 2.	Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
 o	Analysis: [Your analysis here]
-o	Score: [0-100]
-Overall FCV Sensitivity Score
-•	Total Score: [Sum of scores for all questions]
-•	Summary: [Brief summary of the PAD’s FCV sensitivity, highlighting strengths and weaknesses]
-
+o	Score: [Yes/Partial/No]
+Overall FCV Sensitivity Assessment
+•	Summary: [Brief summary of how well the PAD integrates FCV-sensitive measures, highlighting strengths and weaknesses]
 
     """
     input_text = instructions + "\n\n" + document_text
