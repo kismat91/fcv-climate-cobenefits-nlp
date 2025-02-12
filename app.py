@@ -14,6 +14,7 @@ from PyPDF2 import PdfReader
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 
+# Load environment variables
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 client = None
@@ -21,6 +22,8 @@ if openai_api_key:
     client = OpenAI(api_key=openai_api_key)
 else:
     st.warning("OpenAI API key not found. Please set OPENAI_API_KEY in your environment.")
+
+# Streamlit page config
 st.set_page_config(
     page_title="World Bank AI Analyzer 🌍",
     page_icon="🌍",
@@ -28,6 +31,9 @@ st.set_page_config(
 )
 
 
+############################################################
+# 1. CUSTOM CSS
+############################################################
 def add_custom_css():
     st.markdown("""
         <style>
@@ -78,8 +84,9 @@ def add_custom_css():
         </style>
     """, unsafe_allow_html=True)
 
+
 ############################################################
-# 3. GLOBAL PRICING & UTILITIES
+# 2. GLOBAL PRICING & UTILITIES
 ############################################################
 
 PRICING = {
@@ -92,14 +99,19 @@ PRICING = {
     "o1-mini": {"input": 1.10, "output": 4.40}
 }
 
+
 def count_tokens(text, model="gpt-4o-mini"):
+    """Count tokens in a given text using tiktoken."""
     try:
         enc = tiktoken.encoding_for_model(model)
         return len(enc.encode(text))
     except KeyError:
-        return len(text.split())  # Fallback estimate
+        # Fallback if the model isn't recognized by tiktoken
+        return len(text.split())
+
 
 def calculate_cost(input_tokens, output_tokens, model):
+    """Calculate the cost of a request based on input/output tokens and chosen model."""
     if model in PRICING:
         input_cost_per_million = PRICING[model]["input"]
         output_cost_per_million = PRICING[model]["output"]
@@ -109,7 +121,12 @@ def calculate_cost(input_tokens, output_tokens, model):
         return round(input_cost, 6), round(output_cost, 6), round(total_cost, 6)
     return 0.0, 0.0, 0.0
 
+
 def parse_fcv_scores(response_text):
+    """
+    Parse the FCV scores from the AI response.
+    If "Score: X" is detected, add a color-coded emoji next to it.
+    """
     lines = response_text.splitlines()
     scored_lines = []
     for line in lines:
@@ -127,29 +144,41 @@ def parse_fcv_scores(response_text):
                     color_emoji = "🔴 (Red)"
                 scored_lines.append(f"{line}  {color_emoji}")
             except ValueError:
+                # If score isn't a valid integer, just append the line
                 scored_lines.append(line)
         else:
             scored_lines.append(line)
     return "\n".join(scored_lines)
 
 
-
 @st.cache_data
 def load_dataset():
-    """Load the dataset from Hugging Face or any other source."""
+    """
+    Load the dataset from Hugging Face or any other source.
+    This is a placeholder function. Replace with your own dataset if needed.
+    """
     url = "hf://datasets/lukesjordan/worldbank-project-documents/wb_project_documents.jsonl.gz"
     df = pd.read_json(url, lines=True, compression="gzip")
     return df
 
+
 def get_document_text(df, project_id):
-    """Retrieve document text from the dataset by project_id."""
+    """
+    Retrieve document text from the dataset by project_id.
+    """
     project_data = df[df["project_id"] == project_id]
     if not project_data.empty:
         return project_data["document_text"].iloc[0]
     else:
         return None
 
+
 def parse_uploaded_file(uploaded_file):
+    """
+    Parse text from an uploaded file.
+    - If it's a PDF, use PyPDF2 to extract text.
+    - Otherwise, assume it's a text file.
+    """
     if uploaded_file is not None:
         file_extension = uploaded_file.name.split(".")[-1].lower()
         if file_extension == "pdf":
@@ -166,12 +195,116 @@ def parse_uploaded_file(uploaded_file):
     return None
 
 
-
 def analyze_with_gpt(document_text, selected_model, temperature=0.8, max_tokens=2000):
+    """
+    Analyze the provided document_text using OpenAI GPT, based on the current protocol
+    stored in st.session_state["protocol"].
+    """
     if client is None:
         return ("Error: OpenAI client not initialized. Please set your API key.", 0, 0, 0, 0, 0)
-    instructions = """
-You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0-3) for each question and provide a detailed analysis to justify your score.
+
+    # Retrieve the current protocol from session state
+    protocol_instructions = st.session_state["protocol"]
+    # Combine the protocol with the user's document text
+    input_text = protocol_instructions + "\n\n" + document_text
+    input_tokens = count_tokens(input_text, selected_model)
+
+    try:
+        response = client.chat.completions.create(
+            model=selected_model,
+            messages=[
+                {"role": "system", "content": protocol_instructions},
+                {"role": "user", "content": document_text}
+            ],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        output_text = response.choices[0].message.content
+    except Exception as e:
+        output_text = f"Error during OpenAI API call: {str(e)}"
+
+    output_tokens = count_tokens(output_text, selected_model)
+    input_cost, output_cost, total_cost = calculate_cost(input_tokens, output_tokens, selected_model)
+
+    return output_text, input_tokens, output_tokens, input_cost, output_cost, total_cost
+
+
+def add_usage_history(input_tokens, output_tokens, total_cost):
+    """
+    Save the usage (token count and cost) in the session state for visualization.
+    """
+    if "usage_history" not in st.session_state:
+        st.session_state["usage_history"] = []
+
+    st.session_state["usage_history"].append({
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "total_tokens": input_tokens + output_tokens,
+        "cost": total_cost
+    })
+
+
+def get_usage_history_df():
+    """
+    Retrieve the usage history as a DataFrame.
+    """
+    if "usage_history" not in st.session_state:
+        st.session_state["usage_history"] = []
+    return pd.DataFrame(st.session_state["usage_history"])
+
+
+def export_report_as_pdf(response_text):
+    """
+    Export AI-generated analysis report as a PDF.
+    """
+    pdf_buffer = BytesIO()
+    doc = SimpleDocTemplate(pdf_buffer)
+    styles = getSampleStyleSheet()
+    lines = response_text.split("\n")
+    story = []
+    for line in lines:
+        story.append(Paragraph(line, styles["Normal"]))
+    doc.build(story)
+    pdf_data = pdf_buffer.getvalue()
+    return pdf_data
+
+
+def export_report_as_csv(response_text):
+    """
+    Export AI-generated analysis report as a CSV.
+    """
+    lines = response_text.split("\n")
+    df = pd.DataFrame({"Analysis": lines})
+    return df.to_csv(index=False).encode("utf-8")
+
+
+def export_report_as_json(response_text):
+    """
+    Export AI-generated analysis report as a JSON.
+    """
+    lines = response_text.split("\n")
+    return json.dumps({"analysis": lines}, indent=2).encode("utf-8")
+
+
+############################################################
+# 3. MAIN APP
+############################################################
+def main():
+    add_custom_css()
+
+    # ---------------
+    # SIDEBAR - Protocol Input
+    # ---------------
+    st.sidebar.title("World Bank AI Analyzer 🌍")
+    st.sidebar.markdown("---")
+
+    # Set up a default protocol if it's not in session
+    default_protocol = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. 
+Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. 
+Analyze the provided document text and answer the following guiding questions for each of the five characteristics. 
+Assign a score (0-3) for each question and provide a detailed analysis to justify your score.
+
 ### Scoring System:
 - **3 = Thoroughly Addressed**: The PAD explicitly and comprehensively incorporates FCV-sensitive measures aligned with the question.
 - **2 = Moderately Addressed**: The PAD adequately addresses the question but may lack depth or completeness.
@@ -252,123 +385,50 @@ At the end, provide:
 ### Overall FCV Sensitivity Score
 - **Total Score**: [Sum of scores for all questions]
 - **Summary**: [Brief summary of the PAD's FCV sensitivity, highlighting strengths and weaknesses]
-    """
-    input_text = instructions + "\n\n" + document_text
-    input_tokens = count_tokens(input_text, selected_model)
+"""
 
-    try:
-        response = client.chat.completions.create(
-            model=selected_model,
-            messages=[
-                {"role": "system", "content": instructions},
-                {"role": "user", "content": document_text}
-            ],
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
-        output_text = response.choices[0].message.content
-    except Exception as e:
-        output_text = f"Error during OpenAI API call: {str(e)}"
-    output_tokens = count_tokens(output_text, selected_model)
-    input_cost, output_cost, total_cost = calculate_cost(input_tokens, output_tokens, selected_model)
+    if "protocol" not in st.session_state:
+        st.session_state["protocol"] = default_protocol
 
-    return output_text, input_tokens, output_tokens, input_cost, output_cost, total_cost
+    st.sidebar.subheader("Current Protocol")
+    new_protocol = st.sidebar.text_area("Edit or enter a new protocol:", st.session_state["protocol"], height=400)
+    if st.sidebar.button("Update Protocol"):
+        st.session_state["protocol"] = new_protocol
+        st.sidebar.success("Protocol updated successfully!")
 
-
-def add_usage_history(input_tokens, output_tokens, total_cost):
-    if "usage_history" not in st.session_state:
-        st.session_state["usage_history"] = []
-
-    st.session_state["usage_history"].append({
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "input_tokens": input_tokens,
-        "output_tokens": output_tokens,
-        "total_tokens": input_tokens + output_tokens,
-        "cost": total_cost
-    })
-
-def get_usage_history_df():
-    if "usage_history" not in st.session_state:
-        st.session_state["usage_history"] = []
-    return pd.DataFrame(st.session_state["usage_history"])
-
-
-def export_report_as_pdf(response_text):
-    pdf_buffer = BytesIO()
-    doc = SimpleDocTemplate(pdf_buffer)
-    styles = getSampleStyleSheet()
-    lines = response_text.split("\n")
-    story = []
-    for line in lines:
-        story.append(Paragraph(line, styles["Normal"]))
-    doc.build(story)
-    pdf_data = pdf_buffer.getvalue()
-    return pdf_data
-
-def export_report_as_csv(response_text):
-    lines = response_text.split("\n")
-    df = pd.DataFrame({"Analysis": lines})
-    return df.to_csv(index=False).encode("utf-8")
-
-def export_report_as_json(response_text):
-    lines = response_text.split("\n")
-    return json.dumps({"analysis": lines}, indent=2).encode("utf-8")
-
-
-def chatbot_assistant_ui():
-    st.sidebar.subheader("🤖 Chat Assistant")
-    if "chat_history" not in st.session_state:
-        st.session_state["chat_history"] = []
-    user_query = st.sidebar.text_input("Ask something about the app or OpenAI:", key="assistant_query")
-    if st.sidebar.button("Send", key="assistant_send"):
-        if user_query and client is not None:
-            st.session_state["chat_history"].append({"role": "user", "content": user_query})
-            try:
-                completion = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": "You are a helpful assistant."},
-                        {"role": "user", "content": user_query}
-                    ],
-                    temperature=0.7
-                )
-                assistant_resp = completion.choices[0].message.content
-            except Exception as e:
-                assistant_resp = f"Error: {e}"
-
-            st.session_state["chat_history"].append({"role": "assistant", "content": assistant_resp})
-
-    for msg in st.session_state["chat_history"]:
-        if msg["role"] == "user":
-            st.sidebar.markdown(f"**User**: {msg['content']}")
-        else:
-            st.sidebar.markdown(f"**Assistant**: {msg['content']}")
-
-
-def main():
-    add_custom_css()
-    st.sidebar.title("World Bank AI Analyzer 🌍")
-    st.sidebar.markdown("---")
-    chatbot_assistant_ui()
+    # Main Tabs
     tabs = st.tabs(["Home 🏠", "Analyze Document 📑", "Settings ⚙️", "About ℹ️"])
+
+    # ---------------
+    # TAB 1: Home
+    # ---------------
     with tabs[0]:
         st.title("Welcome to the World Bank AI Analyzer 🌍")
         st.markdown("""
         This application allows you to analyze World Bank project documents using 
         OpenAI models for **Fragility, Conflict, and Violence (FCV)** sensitivity.
+
         **Key Features**:
         - Project ID or file-based document retrieval
         - GPT-based analysis with cost & token usage tracking
         - Color-coded, collapsible results
         - Exportable AI-generated reports (PDF, CSV, JSON)
-        - Chat assistant for quick queries
 
         Use the tabs above to navigate through the app!
         """)
+
+    # ---------------
+    # TAB 2: Analyze Document
+    # ---------------
     with tabs[1]:
         st.header("Analyze Document 📑")
+
+        # Load dataset
         df = load_dataset()
+
+        # Choose analysis mode
         analysis_mode = st.radio("Select Analysis Mode:", ["Project ID from Dataset", "Upload Your File"])
+
         document_text = None
         if analysis_mode == "Project ID from Dataset":
             project_ids = df["project_id"].unique().tolist()
@@ -407,6 +467,8 @@ def main():
                 st.session_state["temperature"] = 0.8
             if "max_tokens" not in st.session_state:
                 st.session_state["max_tokens"] = 2000
+
+            # Button to start the GPT analysis
             if st.button("🚀 Analyze with GPT"):
                 with st.spinner("🤖 AI is analyzing..."):
                     (
@@ -423,19 +485,26 @@ def main():
                         st.session_state["max_tokens"]
                     )
                 add_usage_history(input_tokens, output_tokens, total_cost)
+
+                # Display results
                 st.subheader("Analysis Results")
                 color_coded_response = parse_fcv_scores(response_text)
                 with st.expander("Click to expand AI Analysis", expanded=True):
                     st.markdown(f"```\n{color_coded_response}\n```")
+
+                # Token and cost breakdown
                 st.subheader("📌 Token & Cost Usage")
                 st.write(f"**Model Used:** {st.session_state['selected_model']}")
                 st.write(f"**Input Tokens:** {input_tokens}")
                 st.write(f"**Output Tokens:** {output_tokens}")
                 st.write(f"**Total Tokens Used:** {input_tokens + output_tokens}")
+
                 st.subheader("💰 Cost Breakdown")
                 st.write(f"**Input Cost:** `${input_cost}`")
                 st.write(f"**Output Cost:** `${output_cost}`")
                 st.write(f"**Total Cost:** `${total_cost}`")
+
+                # Export options
                 st.subheader("📤 Export Analysis")
                 st.caption("Use the download buttons below to get your analysis report.")
                 pdf_data = export_report_as_pdf(response_text)
@@ -459,6 +528,10 @@ def main():
                     file_name="analysis_report.json",
                     mime="application/json"
                 )
+
+    # ---------------
+    # TAB 3: Settings
+    # ---------------
     with tabs[2]:
         st.header("Settings ⚙️")
 
@@ -468,12 +541,14 @@ def main():
             model_options,
             index=model_options.index(st.session_state.get("selected_model", "gpt-4o-mini"))
         )
+
         st.session_state["temperature"] = st.slider(
             "Temperature (creativity)",
             0.0, 1.0,
             st.session_state["temperature"],
             0.1
         )
+
         st.session_state["max_tokens"] = st.number_input(
             "Max Tokens for Response",
             min_value=100,
@@ -494,6 +569,7 @@ def main():
             st.write("Below is the usage history of your analysis sessions.")
             st.dataframe(usage_df)
 
+            # Cost over time chart
             c = alt.Chart(usage_df).mark_line(point=True).encode(
                 x="timestamp:T",
                 y="cost:Q",
@@ -501,6 +577,7 @@ def main():
             ).properties(title="Cost Over Time")
             st.altair_chart(c, use_container_width=True)
 
+            # Total tokens over time chart
             c2 = alt.Chart(usage_df).mark_bar().encode(
                 x="timestamp:T",
                 y="total_tokens:Q",
@@ -510,6 +587,9 @@ def main():
         else:
             st.info("No usage history yet.")
 
+    # ---------------
+    # TAB 4: About
+    # ---------------
     with tabs[3]:
         st.header("About ℹ️")
         st.markdown("""
@@ -522,6 +602,8 @@ def main():
         - [OpenAI Python Client](https://pypi.org/project/openai/) for GPT Models
         - [tiktoken](https://github.com/openai/tiktoken) for token counting
         - [Altair](https://altair-viz.github.io/) for data visualization
+        - [PyPDF2](https://pypi.org/project/PyPDF2/) for PDF parsing
+        - [ReportLab](https://pypi.org/project/reportlab/) for PDF report generation
 
         **Contact**:
         - Email: example@example.com
@@ -529,8 +611,8 @@ def main():
         """)
 
 
+# ---------------
+# LAUNCH
+# ---------------
 if __name__ == "__main__":
     main()
-
-
-
