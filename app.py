@@ -132,7 +132,7 @@ def calculate_cost(input_tokens, output_tokens, model):
 def parse_fcv_scores(response_text):
     """
     Parse the FCV scores from the AI response.
-    If "Score: X" is detected, add a color-coded emoji next to it.
+    If "Score:" is detected, add a color-coded emoji next to it.
     """
     lines = response_text.splitlines()
     scored_lines = []
@@ -305,6 +305,307 @@ def get_document_text_from_db(project_id):
     return None
 
 ############################################################
+# PROMPTS
+############################################################
+PROMPT_1 = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a Yes, Partial, or No response for each question and provide a detailed analysis to justify your choice.
+Scoring System:
+•	Yes = The PAD explicitly and comprehensively incorporates FCV-sensitive measures aligned with the question.
+•	Partial = The PAD references the issue but in a limited, superficial, or indirect way, or lacks full coverage.
+•	No = There is no evidence in the PAD that the issue has been addressed.
+Output Format:
+For each characteristic, provide the following:
+1.	Guiding Question: [Question]
+o	Analysis: [Detailed analysis of how the PAD addresses the question]
+o	Score: [Yes/Partial/No]
+At the end, provide:
+•	Overall FCV Sensitivity Assessment: [Summary of how well the PAD integrates FCV-sensitive measures]
+Evaluation Criteria
+Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+1.	Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+2.	Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+
+Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+1.	Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+2.	Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+3.	Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+1.	Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+2.	Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+1.	Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+2.	Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+1.	Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+2.	Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
+o	Analysis: [Your analysis here]
+o	Score: [Yes/Partial/No]
+
+Overall FCV Sensitivity Assessment
+Summary: [Brief summary of how well the PAD integrates FCV-sensitive measures, highlighting strengths and weaknesses]
+
+
+"""
+
+PROMPT_2 = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0-10) for each question and provide a detailed analysis to justify your score.
+Scoring System:
+•	9-10 = Thoroughly Addressed: The PAD explicitly and comprehensively incorporates FCV-sensitive measures aligned with the question, providing detailed risk mitigation strategies.
+•	6-8 = Moderately Addressed: The PAD acknowledges FCV risks and integrates some strategies, but with gaps in specificity or depth.
+•	3-5 = Weakly Addressed: The PAD references FCV risks indirectly but lacks substantial integration.
+•	0-2 = Not Addressed: No reference to FCV-related risks or considerations.
+Output Format:
+For each characteristic, provide the following:
+1.	Guiding Question: [Question]
+o	Analysis: [Detailed analysis of how the PAD addresses the question]
+o	Score: [Score between 0 and 10]
+At the end, provide:
+•	Overall FCV Sensitivity Score: [Sum of scores for all questions]
+•	Summary: [Brief summary of the PAD’s FCV sensitivity]
+Evaluation Criteria
+Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+1.	Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+2.	Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+1.	Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+2.	Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+3.	Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+1.	Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+2.	Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+1.	Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+2.	Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+1.	Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+2.	Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
+o	Analysis: [Your analysis here]
+o	Score: [0-10]
+Overall FCV Sensitivity Score
+•	Total Score: [Sum of scores for all questions]
+•	Summary: [Brief summary of the PAD’s FCV sensitivity, highlighting strengths and weaknesses]
+
+"""
+
+PROMPT_3 = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) using the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0-100) for each question and provide a detailed analysis to justify your score.
+Scoring System:
+•	90-100 = Exceptional: Comprehensive FCV integration with detailed risk analysis and mitigation strategies.
+•	75-89 = Strong: Well-addressed but may have some gaps in FCV consideration.
+•	50-74 = Moderate: References FCV risks but lacks full integration or depth.
+•	25-49 = Weak: Limited or indirect mention of FCV factors with minimal strategy.
+•	0-24 = Not Addressed: No mention of FCV issues in the PAD.
+Output Format:
+For each characteristic, provide the following:
+1.	Guiding Question: [Question]
+o	Analysis: [Detailed analysis of how the PAD addresses the question]
+o	Score: [0-100]
+At the end, provide:
+•	Overall FCV Sensitivity Score: [Sum of scores for all questions]
+•	Summary: [Brief summary of the PAD’s FCV sensitivity]
+Evaluation Criteria
+Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+1.	Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+2.	Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+1.	Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+2.	Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+3.	Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+1.	Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+2.	Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+1.	Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+2.	Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+1.	Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+2.	Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
+o	Analysis: [Your analysis here]
+o	Score: [0-100]
+Overall FCV Sensitivity Score
+•	Total Score: [Sum of scores for all questions]
+•	Summary: [Brief summary of the PAD’s FCV sensitivity, highlighting strengths and weaknesses]
+
+"""
+
+PROMPT_4 = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0-3) for each question and provide a detailed analysis to justify your score.
+
+Scoring System:
+
+3 = Thoroughly Addressed: The PAD explicitly and comprehensively incorporates FCV-sensitive measures aligned with the question.
+
+2 = Moderately Addressed: The PAD adequately addresses the question but may lack depth or completeness.
+
+1 = Weakly Addressed: The PAD references the issue but in a limited, superficial, or indirect way.
+
+0 = Not Addressed: There is no evidence in the PAD that the issue has been addressed.
+
+Output Format:
+
+For each characteristic, provide the following:
+
+Guiding Question: [Question]
+
+Analysis: [Detailed analysis of how the PAD addresses the question]
+
+Score: [Score between 0 and 3]
+
+At the end, provide:
+
+Overall FCV Sensitivity Score: [Sum of scores for all questions]
+
+Summary: [Brief summary of the PAD's FCV sensitivity]
+
+Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+
+Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+
+Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+
+Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+
+Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+
+Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Overall FCV Sensitivity Score
+
+Total Score: [Sum of scores for all questions]
+
+Summary: [Brief summary of the PAD's FCV sensitivity, highlighting strengths and weaknesses]
+
+
+"""
+
+ALL_PROMPTS = {
+    "Prompt 1": PROMPT_1,
+    "Prompt 2": PROMPT_2,
+    "Prompt 3": PROMPT_3,
+    "Prompt 4": PROMPT_4
+}
+
+############################################################
 # MAIN APP
 ############################################################
 def main():
@@ -318,36 +619,36 @@ def main():
     if "max_tokens" not in st.session_state:
         st.session_state["max_tokens"] = 2000
 
+    # Store chosen prompt in session state
+    if "selected_prompt" not in st.session_state:
+        st.session_state["selected_prompt"] = "Prompt 4"  # default is Prompt 4
+
     st.sidebar.title("World Bank AI Analyzer 🌍")
     st.sidebar.markdown("---")
 
-    default_protocol = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. 
-Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. 
-Analyze the provided document text and answer the following guiding questions for each of the five characteristics. 
-Assign a score (0-3) for each question and provide a detailed analysis to justify your score.
+    # ---------------
+    # Prompt Selector
+    # ---------------
+    prompt_list = list(ALL_PROMPTS.keys())
+    default_index = prompt_list.index("Prompt 4")  # set Prompt 4 as default
+    selected_prompt = st.sidebar.selectbox(
+        "Select a Prompt:",
+        prompt_list,
+        index=default_index
+    )
+    st.session_state["selected_prompt"] = selected_prompt
+    # Set the protocol based on the selected prompt
+    st.session_state["protocol"] = ALL_PROMPTS[selected_prompt]
 
-### Scoring System:
-- **3 = Thoroughly Addressed**: The PAD explicitly and comprehensively incorporates FCV-sensitive measures aligned with the question.
-- **2 = Moderately Addressed**: The PAD adequately addresses the question but may lack depth or completeness.
-- **1 = Weakly Addressed**: The PAD references the issue but in a limited, superficial, or indirect way.
-- **0 = Not Addressed**: There is no evidence in the PAD that the issue has been addressed.
-
-### Output Format:
-For each characteristic, provide the following:
-1. **Guiding Question**: [Question]
-   - **Analysis**: [Detailed analysis of how the PAD addresses the question]
-   - **Score**: [Score between 0 and 3]
-
-At the end, provide:
-- **Overall FCV Sensitivity Score**: [Sum of scores for all questions]
-- **Summary**: [Brief summary of the PAD's FCV sensitivity, highlighting strengths and weaknesses]
-"""
-
-    if "protocol" not in st.session_state:
-        st.session_state["protocol"] = default_protocol
-
+    # ---------------
+    # Protocol Editor
+    # ---------------
     st.sidebar.subheader("Current Protocol")
-    new_protocol = st.sidebar.text_area("Edit or enter a new protocol:", st.session_state["protocol"], height=400)
+    new_protocol = st.sidebar.text_area(
+        "Edit or enter a new protocol:",
+        st.session_state["protocol"],
+        height=400
+    )
     if st.sidebar.button("Update Protocol"):
         st.session_state["protocol"] = new_protocol
         st.sidebar.success("Protocol updated successfully!")
@@ -389,17 +690,14 @@ At the end, provide:
 
         # =============== Hugging Face Section ===============
         if data_source == "Hugging Face Dataset":
-            # Use session_state to store DataFrame so we don't lose it on re-runs
             if "hf_df" not in st.session_state:
                 st.session_state["hf_df"] = None
 
-            # Button to load HF dataset
             if st.button("Load Hugging Face Data"):
                 with st.spinner("Loading dataset from Hugging Face..."):
                     st.session_state["hf_df"] = load_dataset()
                 st.success("Hugging Face dataset loaded.")
 
-            # If loaded, show selectbox
             if st.session_state["hf_df"] is not None:
                 project_ids = st.session_state["hf_df"]["project_id"].unique().tolist()
                 selected_project_id = st.selectbox("Select or Search Project ID:", project_ids)
@@ -417,11 +715,9 @@ At the end, provide:
 
         # =============== MongoDB Section ===============
         elif data_source == "MongoDB Dataset":
-            # Use session_state to store project IDs so we don't lose them on re-runs
             if "mongo_ids" not in st.session_state:
                 st.session_state["mongo_ids"] = None
 
-            # Button to fetch from Mongo
             if st.button("Load Project IDs from MongoDB"):
                 with st.spinner("Fetching project IDs from MongoDB..."):
                     st.session_state["mongo_ids"] = get_all_project_ids_from_db()
@@ -429,7 +725,8 @@ At the end, provide:
 
             if st.session_state["mongo_ids"]:
                 selected_mongo_project_id = st.selectbox(
-                    "Select or Search Project ID from MongoDB:", st.session_state["mongo_ids"]
+                    "Select or Search Project ID from MongoDB:",
+                    st.session_state["mongo_ids"]
                 )
                 if selected_mongo_project_id:
                     document_text = get_document_text_from_db(selected_mongo_project_id)
