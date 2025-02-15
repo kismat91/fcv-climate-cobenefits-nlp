@@ -14,6 +14,9 @@ from PyPDF2 import PdfReader
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 
+# Additional import for MongoDB
+from pymongo import MongoClient
+
 # Load environment variables
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -23,13 +26,20 @@ if openai_api_key:
 else:
     st.warning("OpenAI API key not found. Please set OPENAI_API_KEY in your environment.")
 
+# MongoDB connection
+mongo_client = MongoClient(
+    'mongodb+srv://Mongo:SecureMongo@cluster0.poitw.mongodb.net/'
+    '?retryWrites=true&w=majority&appName=Cluster0&tlsAllowInvalidCertificates=true'
+)
+db = mongo_client['projects_db']  # Replace with your database name
+collection = db['wb_projects']
+
 # Streamlit page config
 st.set_page_config(
     page_title="World Bank AI Analyzer 🌍",
     page_icon="🌍",
     layout="wide"
 )
-
 
 ############################################################
 # 1. CUSTOM CSS
@@ -99,7 +109,6 @@ PRICING = {
     "o1-mini": {"input": 1.10, "output": 4.40}
 }
 
-
 def count_tokens(text, model="gpt-4o-mini"):
     """Count tokens in a given text using tiktoken."""
     try:
@@ -108,7 +117,6 @@ def count_tokens(text, model="gpt-4o-mini"):
     except KeyError:
         # Fallback if the model isn't recognized by tiktoken
         return len(text.split())
-
 
 def calculate_cost(input_tokens, output_tokens, model):
     """Calculate the cost of a request based on input/output tokens and chosen model."""
@@ -120,7 +128,6 @@ def calculate_cost(input_tokens, output_tokens, model):
         total_cost = input_cost + output_cost
         return round(input_cost, 6), round(output_cost, 6), round(total_cost, 6)
     return 0.0, 0.0, 0.0
-
 
 def parse_fcv_scores(response_text):
     """
@@ -150,8 +157,6 @@ def parse_fcv_scores(response_text):
             scored_lines.append(line)
     return "\n".join(scored_lines)
 
-
-@st.cache_data
 def load_dataset():
     """
     Load the dataset from Hugging Face or any other source.
@@ -160,7 +165,6 @@ def load_dataset():
     url = "hf://datasets/lukesjordan/worldbank-project-documents/wb_project_documents.jsonl.gz"
     df = pd.read_json(url, lines=True, compression="gzip")
     return df
-
 
 def get_document_text(df, project_id):
     """
@@ -171,7 +175,6 @@ def get_document_text(df, project_id):
         return project_data["document_text"].iloc[0]
     else:
         return None
-
 
 def parse_uploaded_file(uploaded_file):
     """
@@ -194,7 +197,6 @@ def parse_uploaded_file(uploaded_file):
             return uploaded_file.read().decode("utf-8", errors="replace")
     return None
 
-
 def analyze_with_gpt(document_text, selected_model, temperature=0.8, max_tokens=2000):
     """
     Analyze the provided document_text using OpenAI GPT, based on the current protocol
@@ -203,9 +205,7 @@ def analyze_with_gpt(document_text, selected_model, temperature=0.8, max_tokens=
     if client is None:
         return ("Error: OpenAI client not initialized. Please set your API key.", 0, 0, 0, 0, 0)
 
-    # Retrieve the current protocol from session state
     protocol_instructions = st.session_state["protocol"]
-    # Combine the protocol with the user's document text
     input_text = protocol_instructions + "\n\n" + document_text
     input_tokens = count_tokens(input_text, selected_model)
 
@@ -228,7 +228,6 @@ def analyze_with_gpt(document_text, selected_model, temperature=0.8, max_tokens=
 
     return output_text, input_tokens, output_tokens, input_cost, output_cost, total_cost
 
-
 def add_usage_history(input_tokens, output_tokens, total_cost):
     """
     Save the usage (token count and cost) in the session state for visualization.
@@ -244,7 +243,6 @@ def add_usage_history(input_tokens, output_tokens, total_cost):
         "cost": total_cost
     })
 
-
 def get_usage_history_df():
     """
     Retrieve the usage history as a DataFrame.
@@ -252,7 +250,6 @@ def get_usage_history_df():
     if "usage_history" not in st.session_state:
         st.session_state["usage_history"] = []
     return pd.DataFrame(st.session_state["usage_history"])
-
 
 def export_report_as_pdf(response_text):
     """
@@ -269,7 +266,6 @@ def export_report_as_pdf(response_text):
     pdf_data = pdf_buffer.getvalue()
     return pdf_data
 
-
 def export_report_as_csv(response_text):
     """
     Export AI-generated analysis report as a CSV.
@@ -278,7 +274,6 @@ def export_report_as_csv(response_text):
     df = pd.DataFrame({"Analysis": lines})
     return df.to_csv(index=False).encode("utf-8")
 
-
 def export_report_as_json(response_text):
     """
     Export AI-generated analysis report as a JSON.
@@ -286,20 +281,46 @@ def export_report_as_json(response_text):
     lines = response_text.split("\n")
     return json.dumps({"analysis": lines}, indent=2).encode("utf-8")
 
+############################################################
+# MongoDB Helpers
+############################################################
+def get_all_project_ids_from_db():
+    """
+    Return a list of all project IDs from MongoDB.
+    """
+    docs = collection.find({}, {"project_id": 1})
+    project_ids = []
+    for d in docs:
+        if "project_id" in d:
+            project_ids.append(d["project_id"])
+    return project_ids
+
+def get_document_text_from_db(project_id):
+    """
+    Retrieve document text (pad_doc) from MongoDB by project_id.
+    """
+    doc = collection.find_one({"project_id": project_id})
+    if doc:
+        return doc.get("pad_doc", "")
+    return None
 
 ############################################################
-# 3. MAIN APP
+# MAIN APP
 ############################################################
 def main():
     add_custom_css()
 
-    # ---------------
-    # SIDEBAR - Protocol Input
-    # ---------------
+    # Ensure defaults exist in session
+    if "selected_model" not in st.session_state:
+        st.session_state["selected_model"] = "gpt-4o-mini"
+    if "temperature" not in st.session_state:
+        st.session_state["temperature"] = 0.8
+    if "max_tokens" not in st.session_state:
+        st.session_state["max_tokens"] = 2000
+
     st.sidebar.title("World Bank AI Analyzer 🌍")
     st.sidebar.markdown("---")
 
-    # Set up a default protocol if it's not in session
     default_protocol = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. 
 Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. 
 Analyze the provided document text and answer the following guiding questions for each of the five characteristics. 
@@ -319,71 +340,6 @@ For each characteristic, provide the following:
 
 At the end, provide:
 - **Overall FCV Sensitivity Score**: [Sum of scores for all questions]
-- **Summary**: [Brief summary of the PAD's FCV sensitivity]
-
----
-
-### Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
-1. **Guiding Question**: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
-2. **Guiding Question**: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
----
-
-### Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
-1. **Guiding Question**: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
-2. **Guiding Question**: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
-3. **Guiding Question**: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
----
-
-### Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
-1. **Guiding Question**: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
-2. **Guiding Question**: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
----
-
-### Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
-1. **Guiding Question**: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
-2. **Guiding Question**: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
----
-
-### Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
-1. **Guiding Question**: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
-2. **Guiding Question**: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
-   - **Analysis**: [Your analysis here]
-   - **Score**: [0-3]
-
----
-
-### Overall FCV Sensitivity Score
-- **Total Score**: [Sum of scores for all questions]
 - **Summary**: [Brief summary of the PAD's FCV sensitivity, highlighting strengths and weaknesses]
 """
 
@@ -399,9 +355,9 @@ At the end, provide:
     # Main Tabs
     tabs = st.tabs(["Home 🏠", "Analyze Document 📑", "Settings ⚙️", "About ℹ️"])
 
-    # ---------------
+    #######################
     # TAB 1: Home
-    # ---------------
+    #######################
     with tabs[0]:
         st.title("Welcome to the World Bank AI Analyzer 🌍")
         st.markdown("""
@@ -409,7 +365,7 @@ At the end, provide:
         OpenAI models for **Fragility, Conflict, and Violence (FCV)** sensitivity.
 
         **Key Features**:
-        - Project ID or file-based document retrieval
+        - Multiple data source options (Hugging Face, MongoDB, or your own file)
         - GPT-based analysis with cost & token usage tracking
         - Color-coded, collapsible results
         - Exportable AI-generated reports (PDF, CSV, JSON)
@@ -417,33 +373,79 @@ At the end, provide:
         Use the tabs above to navigate through the app!
         """)
 
-    # ---------------
+    #######################
     # TAB 2: Analyze Document
-    # ---------------
+    #######################
     with tabs[1]:
         st.header("Analyze Document 📑")
+        st.write("Choose your data source, then proceed to load and analyze it.")
 
-        # Load dataset
-        df = load_dataset()
-
-        # Choose analysis mode
-        analysis_mode = st.radio("Select Analysis Mode:", ["Project ID from Dataset", "Upload Your File"])
+        data_source = st.radio(
+            "Select Data Source:",
+            ["Hugging Face Dataset", "MongoDB Dataset", "Upload Your File"]
+        )
 
         document_text = None
-        if analysis_mode == "Project ID from Dataset":
-            project_ids = df["project_id"].unique().tolist()
-            selected_project_id = st.selectbox("Select or Search Project ID:", project_ids)
-            if selected_project_id:
-                document_text = get_document_text(df, selected_project_id)
-                if document_text:
-                    st.subheader("Document Text Preview")
-                    st.write(
-                        document_text[:500000] + "..."
-                        if len(document_text) > 500000
-                        else document_text
-                    )
-                else:
-                    st.error("No document found for the selected Project ID.")
+
+        # =============== Hugging Face Section ===============
+        if data_source == "Hugging Face Dataset":
+            # Use session_state to store DataFrame so we don't lose it on re-runs
+            if "hf_df" not in st.session_state:
+                st.session_state["hf_df"] = None
+
+            # Button to load HF dataset
+            if st.button("Load Hugging Face Data"):
+                with st.spinner("Loading dataset from Hugging Face..."):
+                    st.session_state["hf_df"] = load_dataset()
+                st.success("Hugging Face dataset loaded.")
+
+            # If loaded, show selectbox
+            if st.session_state["hf_df"] is not None:
+                project_ids = st.session_state["hf_df"]["project_id"].unique().tolist()
+                selected_project_id = st.selectbox("Select or Search Project ID:", project_ids)
+                if selected_project_id:
+                    document_text = get_document_text(st.session_state["hf_df"], selected_project_id)
+                    if document_text:
+                        st.subheader("Document Text Preview")
+                        st.write(
+                            document_text[:500000] + "..."
+                            if len(document_text) > 500000
+                            else document_text
+                        )
+                    else:
+                        st.error("No document found for the selected Project ID.")
+
+        # =============== MongoDB Section ===============
+        elif data_source == "MongoDB Dataset":
+            # Use session_state to store project IDs so we don't lose them on re-runs
+            if "mongo_ids" not in st.session_state:
+                st.session_state["mongo_ids"] = None
+
+            # Button to fetch from Mongo
+            if st.button("Load Project IDs from MongoDB"):
+                with st.spinner("Fetching project IDs from MongoDB..."):
+                    st.session_state["mongo_ids"] = get_all_project_ids_from_db()
+                st.success("MongoDB project IDs loaded.")
+
+            if st.session_state["mongo_ids"]:
+                selected_mongo_project_id = st.selectbox(
+                    "Select or Search Project ID from MongoDB:", st.session_state["mongo_ids"]
+                )
+                if selected_mongo_project_id:
+                    document_text = get_document_text_from_db(selected_mongo_project_id)
+                    if document_text:
+                        st.subheader("Document Text Preview")
+                        st.write(
+                            document_text[:500000] + "..."
+                            if len(document_text) > 500000
+                            else document_text
+                        )
+                    else:
+                        st.error("No document found for this Project ID in MongoDB.")
+            else:
+                st.info("Click the button above to load project IDs from MongoDB.")
+
+        # =============== File Upload Section ===============
         else:
             uploaded_file = st.file_uploader("Upload PDF or Text File", type=["pdf", "txt"])
             if uploaded_file:
@@ -459,16 +461,11 @@ At the end, provide:
                     st.error("Could not parse the uploaded file.")
 
         st.markdown("---")
+
+        # If we have text, show the Analyze button
         if document_text:
             st.subheader("Run Analysis")
-            if "selected_model" not in st.session_state:
-                st.session_state["selected_model"] = "gpt-4o-mini"
-            if "temperature" not in st.session_state:
-                st.session_state["temperature"] = 0.8
-            if "max_tokens" not in st.session_state:
-                st.session_state["max_tokens"] = 2000
 
-            # Button to start the GPT analysis
             if st.button("🚀 Analyze with GPT"):
                 with st.spinner("🤖 AI is analyzing..."):
                     (
@@ -529,9 +526,9 @@ At the end, provide:
                     mime="application/json"
                 )
 
-    # ---------------
+    #######################
     # TAB 3: Settings
-    # ---------------
+    #######################
     with tabs[2]:
         st.header("Settings ⚙️")
 
@@ -587,9 +584,9 @@ At the end, provide:
         else:
             st.info("No usage history yet.")
 
-    # ---------------
+    #######################
     # TAB 4: About
-    # ---------------
+    #######################
     with tabs[3]:
         st.header("About ℹ️")
         st.markdown("""
@@ -604,15 +601,13 @@ At the end, provide:
         - [Altair](https://altair-viz.github.io/) for data visualization
         - [PyPDF2](https://pypi.org/project/PyPDF2/) for PDF parsing
         - [ReportLab](https://pypi.org/project/reportlab/) for PDF report generation
+        - [MongoDB](https://www.mongodb.com/) for storing and retrieving documents
 
         **Contact**:
         - Email: example@example.com
         - GitHub: [YourRepo](https://github.com/YourRepo)
         """)
 
-
-# ---------------
-# LAUNCH
-# ---------------
+# Launch
 if __name__ == "__main__":
     main()
