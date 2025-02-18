@@ -598,11 +598,137 @@ Summary: [Brief summary of the PAD's FCV sensitivity, highlighting strengths and
 
 """
 
+PROMPT_5 = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0-3) for each question and provide a detailed analysis to justify your score.
+
+Scoring System:
+
+3 = Thoroughly Addressed: The PAD explicitly and comprehensively incorporates FCV-sensitive measures aligned with the question.
+
+2 = Moderately Addressed: The PAD adequately addresses the question but may lack depth or completeness.
+
+1 = Weakly Addressed: The PAD references the issue but in a limited, superficial, or indirect way.
+
+0 = Not Addressed: There is no evidence in the PAD that the issue has been addressed.
+
+Output Format:
+
+For each characteristic, provide the following:
+
+Guiding Question: [Question]
+
+Analysis: [Detailed analysis of how the PAD addresses the question]
+
+Score: [Score between 0 and 3]
+
+At the end, provide:
+
+Overall FCV Sensitivity Score: [Sum of scores for all questions]
+
+Summary: [Brief summary of the PAD's FCV sensitivity]
+
+Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+
+Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
+
+Core Issues to Consider: This question evaluates whether the PAD anticipates and addresses FCV-related risks that might disrupt the project. Relevant traits include identifying barriers such as insecurity, governance deficits, corruption, or social mistrust, which can impede delivery. Look for explicit acknowledgment of risks in areas like service delivery, stakeholder engagement, or operational access.
+
+High vs. Low Scores: A high score reflects clearly identified risks, with detailed mitigation strategies such as capacity-building for weak institutions or contingency plans for conflict-prone areas. A low score reflects minimal or superficial identification of FCV risks, with no evidence of how these might impact implementation or how they would be mitigated. 
+
+Key Sections to Review: The Key Risks and Implementation Arrangements sections.
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
+
+Core Issues to Consider: This question assesses whether the PAD explains how climate-related risks (e.g., floods, droughts, storms) exacerbate or intersect with drivers of fragility, conflict, and violence (FCV). Discussions should highlight how resource scarcity, governance challenges, or displacement may emerge or worsen due to climate impacts. The PAD should provide evidence-based, context-specific analysis.
+
+High vs. Low Scores: A high score reflects a detailed and localized analysis of climate-FCV interactions, linking specific climate risks to governance failures, social inequalities, or resource disputes. A low score indicates either a lack of analysis or only generic references to climate-FCV interactions. 
+
+Key Sections to Review: The Country Context and Sectoral and Institutional Context sections.
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+
+Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+
+Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+
+Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+
+Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
+
+Analysis: [Your analysis here]
+
+Score: [0-3]
+
+Overall FCV Sensitivity Score
+
+Total Score: [Sum of scores for all questions]
+
+Summary: [Brief summary of the PAD's FCV sensitivity, highlighting strengths and weaknesses]
+
+
+"""
+
 ALL_PROMPTS = {
     "Prompt 1": PROMPT_1,
     "Prompt 2": PROMPT_2,
     "Prompt 3": PROMPT_3,
-    "Prompt 4": PROMPT_4
+    "Prompt 4": PROMPT_4,
+    "Prompt 5": PROMPT_5
 }
 
 ############################################################
