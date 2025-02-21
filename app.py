@@ -543,7 +543,7 @@ Score: [0-3]
 
 Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
 
-Analysis: [Your analysis here]
+Analysis: [Your analysis here()]
 
 Score: [0-3]
 
