@@ -653,7 +653,6 @@ Analysis: [Your analysis here]
 
 Score: [0-3]
 
-
 Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
 
 Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
@@ -662,7 +661,7 @@ Core Issues to Consider: This question examines whether the project design inclu
 
 High vs. Low Scores: A high score reflects a well-developed safeguards framework, including measures like conflict-sensitive programming and community engagement. A low score suggests limited or no discussion of safeguards to prevent harm.
 
-Key Sections to Review:
+Key Sections to Review: Safeguards, Key Risks and Mitigation Measures
 
 Analysis: [Your analysis here]
 
@@ -674,7 +673,7 @@ Core Issues to Consider: Projects in FCV settings require flexibility to adjust 
 
 High vs. Low Scores: A high score reflects clear mechanisms for adaptability, such as scenario planning or dynamic project components. A low score suggests rigidity in project design with no adaptability measures.
 
-Key Sections to Review:
+Key Sections to Review: Institutional and Implementation Arrangements, Key Risks and Mitigation Measures, Sustainability
 
 Analysis: [Your analysis here]
 
@@ -686,7 +685,7 @@ Core Issues to Consider: This question assesses whether the PAD takes a balanced
 
 High vs. Low Scores: A high score reflects a well-integrated approach where interventions are designed for both immediate relief and long-term sustainability, with explicit risk assessments and mitigation strategies. A low score reflects a lack of foresight, where short-term actions may unintentionally worsen vulnerabilities or fail to align with long-term development goals.
 
-Key Sections to Review:
+Key Sections to Review: Country Context, Sectoral and Institutional Context, Sustainability
 
 Analysis: [Your analysis here]
 
@@ -701,7 +700,7 @@ Core Issues to Consider: Projects should aim to reduce fragility by tackling gov
 
 High vs. Low Scores: A high score reflects targeted interventions to address FCV root causes, while a low score suggests no consideration of these factors.
 
-Key Sections to Review:
+Key Sections to Review: Country Context, Sectoral and Institutional Context, Project Components
 
 Analysis: [Your analysis here]
 
@@ -713,7 +712,7 @@ Core Issues to Consider: This question examines whether the PAD integrates peace
 
 High vs. Low Scores: A high score reflects intentional peacebuilding elements, such as inclusive governance mechanisms, conflict-sensitive resource management, or dialogue facilitation. A low score lacks any consideration of how the project may influence or mitigate social tensions.
 
-Key Sections to Review:
+Key Sections to Review: Higher-Level Objectives to Which the Project Contributes, Safeguards, Key Risks and Mitigation Measures, Institutional and Implementation Arrangements
 
 Analysis: [Your analysis here]
 
@@ -728,7 +727,7 @@ Core Issues to Consider: Projects should incorporate equity considerations and e
 
 High vs. Low Scores: A high score reflects strong provisions for inclusivity and targeted support for vulnerable groups. A low score lacks consideration for marginalized populations.
 
-Key Sections to Review:
+Key Sections to Review: Country Context, Sectoral and Institutional Context, Social (including Safeguards), Project Beneficiaries
 
 Analysis: [Your analysis here]
 
@@ -740,7 +739,7 @@ Core Issues to Consider: This question evaluates whether the project actively en
 
 High vs. Low Scores: A high score reflects proactive measures such as social impact assessments, grievance mechanisms, and affirmative actions to support marginalized communities. A low score indicates a lack of safeguards, risking uneven benefits distribution and potential conflicts.
 
-Key Sections to Review:
+Key Sections to Review: Higher-Level Objectives to Which the Project Contributes, Project Components, Key Risks and Mitigation Measures, Results Framework and Monitoring
 
 Analysis: [Your analysis here]
 
@@ -755,7 +754,7 @@ Core Issues to Consider: Collaboration among multiple actors ensures a holistic 
 
 High vs. Low Scores: A high score reflects well-documented partnerships with key actors. A low score lacks discussion of intersectoral collaboration.
 
-Key Sections to Review:
+Key Sections to Review: Sectoral and Institutional Context, Institutional and Implementation Arrangements, Key Risks and Mitigation Measures, Implementation Support Plan
 
 Analysis: [Your analysis here]
 
@@ -767,7 +766,7 @@ Core Issues to Consider: This question assesses whether the project ensures alig
 
 High vs. Low Scores: A high score reflects clear mechanisms for coordination, such as joint working groups, formal agreements, or integrated planning frameworks. A low score indicates fragmented planning, where stakeholders work in silos without effective collaboration.
 
-Key Sections to Review:
+Key Sections to Review: Institutional and Implementation Arrangements, Project Components, Key Risks and Mitigation Measures, Results Framework and Monitoring
 
 Analysis: [Your analysis here]
 
