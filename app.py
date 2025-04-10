@@ -13,11 +13,7 @@ from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
-
-# Additional import for MongoDB
 from pymongo import MongoClient
-
-# import Protocol prompts for FCV analysis
 from prompts import ALL_PROMPTS
 
 # Load environment variables
