@@ -16,6 +16,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 from pymongo import MongoClient
 from prompts import ALL_PROMPTS
 
+from extract_scores import extract_score_probabilities_and_scores
+
 # Load environment variables
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -298,6 +300,7 @@ def display_extracted_results(llm_output):
                 st.markdown(f"**Score:** {question_data['score']}")
                 st.markdown(f"**Probabilities:** {question_data['probabilities']}")
                 st.markdown("---")
+                
 ############################################################
 # MongoDB Helpers
 ############################################################

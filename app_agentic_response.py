@@ -18,6 +18,8 @@ from prompts import ALL_PROMPTS
 import uuid
 import hashlib
 
+from extract_scores import extract_score_probabilities_and_scores
+
 # Load environment variables
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -377,6 +379,24 @@ def export_report_as_json(response_text):
     lines = response_text.split("\n")
     return json.dumps({"analysis": lines}, indent=2).encode("utf-8")
 
+# Display Extracted Results
+def display_extracted_results(llm_output):
+    """
+    Display results extracted from the extract_score_probabilities_and_scores function.
+    """
+
+    extracted_results, total_score = extract_score_probabilities_and_scores(llm_output)
+
+    st.subheader("Extracted Results")
+    st.write(f"**Total FCV Sensitivity Score:** {total_score}")
+
+    for characteristic, questions in extracted_results.items():
+        with st.expander(f"Characteristic: {characteristic}", expanded=False):
+            for question_data in questions:
+                st.markdown(f"**Question:** {question_data['question']}")
+                st.markdown(f"**Score:** {question_data['score']}")
+                st.markdown(f"**Probabilities:** {question_data['probabilities']}")
+                st.markdown("---")
 
 ###########################################
 # 5. MONGODB HELPERS
@@ -406,7 +426,7 @@ def main():
     if "max_tokens" not in st.session_state:
         st.session_state["max_tokens"] = 2000
     if "selected_prompt" not in st.session_state:
-        st.session_state["selected_prompt"] = "Prompt 4"
+        st.session_state["selected_prompt"] = "Prompt 4 (Probabilities)"
 
     # --- In your MAIN APP, after protocol update, in the sidebar ---
 
@@ -415,7 +435,7 @@ def main():
     st.sidebar.markdown("---")
 
     prompt_list = list(ALL_PROMPTS.keys())
-    default_index = prompt_list.index("Prompt 4")
+    default_index = prompt_list.index("Prompt 4 (Probabilities)")
     selected_prompt = st.sidebar.selectbox("Select a Prompt:", prompt_list, index=default_index)
     st.session_state["selected_prompt"] = selected_prompt
     st.session_state["protocol"] = ALL_PROMPTS[selected_prompt]
@@ -450,6 +470,7 @@ def main():
                 with st.sidebar.expander("Report Preview", expanded=True):
                     st.markdown("### Report")
                     st.text_area("Report Content", report_text, height=200, disabled=True)
+                    display_extracted_results(report_text)
                 st.sidebar.download_button("Download Report (PDF)", data=export_report_as_pdf(report_text),
                                            file_name="report.pdf", mime="application/pdf")
         else:

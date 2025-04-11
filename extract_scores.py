@@ -82,6 +82,73 @@ test_llm_output = """"" \
 The PAD for the Strategic Cities Development Project in Sri Lanka generally demonstrates a moderate sensitivity to FCV issues, particularly in identifying risks and addressing the needs of vulnerable populations. Strengths include a well-articulated social management framework and mechanisms for community engagement. However, it lacks comprehensive strategies that explicitly link climate impacts to FCV dynamics and could benefit from clearer frameworks for peacebuilding and conflict resolution. Overall, while the project addresses several critical aspects of FCV sensitivity, there is room for improvement in articulating detailed mechanisms and strategies to enhance resilience and minimize maladaptive outcomes.
 """
 
+test_llm_output_2 = """\
+Here is the evaluation of the Project Appraisal Document (PAD) based on the Fragility, Conflict, and Violence (FCV) Sensitivity Assessment Protocol.
+
+### Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+
+**Guiding Question:** Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?  
+**Analysis:** The PAD identifies potential barriers to project implementation, particularly regarding involuntary resettlement due to land acquisition and mentions the sensitivity required in construction activities in prone areas. However, it does not comprehensively detail security risks or institutional weaknesses beyond the initial mention.  
+**Probabilities:** score 0 [0.1], score 1 [0.3], score 2 [0.5], score 3 [0.1]
+
+**Guiding Question:** To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?  
+**Analysis:** The PAD describes environmental assessments and mentions sustainability considerations but does not deeply explore the interconnected pathways between climate impacts and FCV dynamics.  
+**Probabilities:** score 0 [0.2], score 1 [0.4], score 2 [0.3], score 3 [0.1]
+
+### Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+
+**Guiding Question:** Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?  
+**Analysis:** The PAD outlines a Social Management Framework (SMF) aimed at mitigating adverse social impacts, particularly from resettlement. There is an acknowledgment of the need for safeguards, but specific measures to avoid exacerbating FCV-related issues could be more detailed.  
+**Probabilities:** score 0 [0.1], score 1 [0.2], score 2 [0.5], score 3 [0.2]
+
+**Guiding Question:** To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?  
+**Analysis:** The PAD mentions monitoring and evaluation as part of implementation but does not explicitly outline adaptive mechanisms to respond to evolving FCV conditions, suggesting a gap.  
+**Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+**Guiding Question:** Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?  
+**Analysis:** There is some mention of resilience and sustainability in the project design but lacking in specific strategies to balance immediate needs without risking maladaptive outcomes.  
+**Probabilities:** score 0 [0.2], score 1 [0.3], score 2 [0.4], score 3 [0.1]
+
+### Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+
+**Guiding Question:** Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?  
+**Analysis:** The PAD primarily focuses on infrastructural improvements rather than directly addressing root causes of FCV such as inequitable resource distribution. This is a notable gap.  
+**Probabilities:** score 0 [0.3], score 1 [0.5], score 2 [0.2], score 3 [0.0]
+
+**Guiding Question:** Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?  
+**Analysis:** There are references to community engagement, but the specific peacebuilding initiatives or strategies to foster social cohesion are not well articulated in the document.  
+**Probabilities:** score 0 [0.4], score 1 [0.4], score 2 [0.2], score 3 [0.0]
+
+### Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+
+**Guiding Question:** Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?  
+**Analysis:** The PAD mentions affected communities due to land acquisition but lacks in-depth analysis or specific measures tailored for vulnerable populations within those communities.  
+**Probabilities:** score 0 [0.2], score 1 [0.5], score 2 [0.2], score 3 [0.1]
+
+**Guiding Question:** Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?  
+**Analysis:** The document does outline a framework for compensation and rehabilitation but does not comprehensively address mechanisms for equitable benefit-sharing, which is needed for ensuring fairness.  
+**Probabilities:** score 0 [0.2], score 1 [0.4], score 2 [0.3], score 3 [0.1]
+
+### Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+
+**Guiding Question:** Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?  
+**Analysis:** The PAD indicates stakeholder consultations and aligns with some collaborative frameworks but lacks extensive detail on specific partnerships across sectors related to peacebuilding or disaster risk management (DRM).  
+**Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+**Guiding Question:** Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?  
+**Analysis:** The PAD lacks clarity on specific mechanisms for coordinating actions among different actors, which is crucial for effective implementation and avoiding duplication of efforts.  
+**Probabilities:** score 0 [0.4], score 1 [0.4], score 2 [0.1], score 3 [0.1]
+
+### Overall Summary:
+The PAD shows a moderate effort to address FCV sensitivity issues, particularly in terms of social impacts and mitigation measures. However, significant gaps remain in explicitly identifying risks related to climate impacts and FCV dynamics, deeply addressing root causes, and ensuring collaboration across actors. The document could significantly benefit from a more thorough analysis and explicit measures to enhance resilience and social cohesion among vulnerable populations.
+
+---
+🧮 **Usage Summary**
+- Input tokens: 7591
+- Output tokens: 1381
+- 💰 Estimated cost: $0.05867
+"""
+
 
 def extract_score_probabilities_and_scores(llm_output: str):
     """
@@ -90,10 +157,11 @@ def extract_score_probabilities_and_scores(llm_output: str):
     output = {}
     total_score = 0
     characteristic = None
-    # question_index = 0
+    line_number = 0
 
     lines = llm_output.split('\n')
     for line in lines:
+        line_number += 1
         # Match characteristic headers
         char_match = re.match(r'.*Characteristic \d+: (.+)', line)
         if char_match:
@@ -128,12 +196,7 @@ def extract_score_probabilities_and_scores(llm_output: str):
             max_prob = max(probs)
             max_score = probs.index(max_prob)
 
-            # output[characteristic][question_index]['probabilities'] = probs_dict
-            # output[characteristic][question_index]['score'] = max_score
-            # total_score += max_score
-            # question_index += 1
-
-            output[characteristic][-1]['probabilities'] = probs_dict
+            output[characteristic].append({'probabilities': probs_dict})
             output[characteristic][-1]['score'] = max_score
             total_score += max_score
 
