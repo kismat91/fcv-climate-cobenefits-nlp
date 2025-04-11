@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
+from extract_scores import extract_score_probabilities_and_scores
 
 # Additional import for MongoDB
 from pymongo import MongoClient
@@ -200,7 +201,7 @@ def parse_uploaded_file(uploaded_file):
             return uploaded_file.read().decode("utf-8", errors="replace")
     return None
 
-def analyze_with_gpt(document_text, selected_model, temperature=0.8, max_tokens=2000):
+def analyze_with_gpt(document_text, selected_model, temperature=0.8, max_tokens=3000):
     """
     Analyze the provided document_text using OpenAI GPT, based on the current protocol
     stored in st.session_state["protocol"].
@@ -284,6 +285,24 @@ def export_report_as_json(response_text):
     lines = response_text.split("\n")
     return json.dumps({"analysis": lines}, indent=2).encode("utf-8")
 
+# Display Extracted Results
+def display_extracted_results(llm_output):
+    """
+    Display results extracted from the extract_score_probabilities_and_scores function.
+    """
+
+    extracted_results, total_score = extract_score_probabilities_and_scores(llm_output)
+
+    st.subheader("Extracted Results")
+    st.write(f"**Total FCV Sensitivity Score:** {total_score}")
+
+    for characteristic, questions in extracted_results.items():
+        with st.expander(f"Characteristic: {characteristic}", expanded=False):
+            for question_data in questions:
+                st.markdown(f"**Question:** {question_data['question']}")
+                st.markdown(f"**Score:** {question_data['score']}")
+                st.markdown(f"**Probabilities:** {question_data['probabilities']}")
+                st.markdown("---")
 ############################################################
 # MongoDB Helpers
 ############################################################
@@ -323,7 +342,7 @@ def main():
 
     # Store chosen prompt in session state
     if "selected_prompt" not in st.session_state:
-        st.session_state["selected_prompt"] = "Prompt 4"  # default is Prompt 4
+        st.session_state["selected_prompt"] = "Prompt 4 (Probabilities)"  # default is Prompt 4
 
     st.sidebar.title("World Bank AI Analyzer 🌍")
     st.sidebar.markdown("---")
@@ -332,7 +351,7 @@ def main():
     # Prompt Selector
     # ---------------
     prompt_list = list(ALL_PROMPTS.keys())
-    default_index = prompt_list.index("Prompt 4")  # set Prompt 4 as default
+    default_index = prompt_list.index("Prompt 4 (Probabilities)")  # set Prompt 4 as default
     selected_prompt = st.sidebar.selectbox(
         "Select a Prompt:",
         prompt_list,
@@ -487,6 +506,9 @@ def main():
                 color_coded_response = parse_fcv_scores(response_text)
                 with st.expander("Click to expand AI Analysis", expanded=True):
                     st.markdown(f"```\n{color_coded_response}\n```")
+
+                # Display extracted results
+                display_extracted_results(response_text)
 
                 # Token and cost breakdown
                 st.subheader("📌 Token & Cost Usage")
