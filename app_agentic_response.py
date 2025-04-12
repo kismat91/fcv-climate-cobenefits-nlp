@@ -379,24 +379,6 @@ def export_report_as_json(response_text):
     lines = response_text.split("\n")
     return json.dumps({"analysis": lines}, indent=2).encode("utf-8")
 
-# Display Extracted Results
-def display_extracted_results(llm_output):
-    """
-    Display results extracted from the extract_score_probabilities_and_scores function.
-    """
-
-    extracted_results, total_score = extract_score_probabilities_and_scores(llm_output)
-
-    st.subheader("Extracted Results")
-    st.write(f"**Total FCV Sensitivity Score:** {total_score}")
-
-    for characteristic, questions in extracted_results.items():
-        with st.expander(f"Characteristic: {characteristic}", expanded=False):
-            for question_data in questions:
-                st.markdown(f"**Question:** {question_data['question']}")
-                st.markdown(f"**Score:** {question_data['score']}")
-                st.markdown(f"**Probabilities:** {question_data['probabilities']}")
-                st.markdown("---")
 
 ###########################################
 # 5. MONGODB HELPERS
@@ -470,7 +452,42 @@ def main():
                 with st.sidebar.expander("Report Preview", expanded=True):
                     st.markdown("### Report")
                     st.text_area("Report Content", report_text, height=200, disabled=True)
-                    display_extracted_results(report_text)
+
+                    # Extract and display results in the main app (not nested in the sidebar expander)
+                    st.subheader("Extracted Results from Report")
+                    from extract_scores import extract_score_probabilities_and_scores
+                    extracted_results, total_score = extract_score_probabilities_and_scores(report_text)
+
+                    st.write(f"**Total FCV Sensitivity Score:** {total_score}")
+                    # for characteristic, questions in extracted_results.items():
+                    #     with st.markdown(f"### Characteristic: {characteristic}"):
+                    #         for question_data in questions:
+                    #             st.markdown(f"**Question:** {question_data.get('question', 'N/A')}")
+                    #             st.markdown(f"**Score:** {question_data.get('score', 'N/A')}")
+                    #             st.markdown(f"**Probabilities:** {question_data.get('probabilities', 'N/A')}")
+                    #             st.markdown("---")
+
+                    # Prepare a list to hold the data for the table
+                    table_data = []
+
+                    # Loop through the extracted results and add rows to the table data
+                    for characteristic, questions in extracted_results.items():
+                        for question_data in questions:
+                            table_data.append({
+                                "Characteristic": characteristic,
+                                "Question": question_data.get("question", "N/A"),
+                                "Score": question_data.get("score", "N/A"),
+                                "Probabilities": question_data.get("probabilities", "N/A")
+                            })
+
+                    # Convert the table data to a DataFrame and display it
+                    if table_data:
+                        df = pd.DataFrame(table_data)
+                        st.table(df)  # Use st.table(df) for a static table
+                    else:
+                        st.write("No results to display.")
+                
+                # Provide a download button for the report
                 st.sidebar.download_button("Download Report (PDF)", data=export_report_as_pdf(report_text),
                                            file_name="report.pdf", mime="application/pdf")
         else:

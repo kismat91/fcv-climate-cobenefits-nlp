@@ -149,6 +149,237 @@ The PAD shows a moderate effort to address FCV sensitivity issues, particularly 
 - 💰 Estimated cost: $0.05867
 """
 
+test_llm_output_3 = """\
+### Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+
+#### Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
+**Analysis:** The PAD identifies various risks related to project implementation, including institutional weaknesses and fragmentation of responsibilities among multiple agencies. It acknowledges the challenges posed by the relatively weak capacity of local authorities in Kandy and Galle, which could impact the project's success. However, it lacks a thorough exploration of specific security risks and community relations issues that could hinder implementation. 
+**Score:** 2
+**Probabilities:** 
+- score 0 [0], score 1 [0.2], score 2 [0.6], score 3 [0.2]
+
+#### Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
+**Analysis:** The PAD mentions the impact of climate change on flooding in Galle, acknowledging increased rainfall intensity. However, it does not delve deeply into how these climate impacts create or exacerbate existing FCV dynamics within the project regions. There's a need for more explicit connections drawn between climate impacts and potential conflict or violence scenarios.
+**Score:** 1
+**Probabilities:** 
+- score 0 [0], score 1 [0.7], score 2 [0.3]
+
+### Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+
+#### Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
+**Analysis:** The PAD outlines various safeguards, including a Resettlement Policy Framework and Environmental Assessment and Management Framework. It indicates that steps will be taken to mitigate adverse impacts on local communities. However, it does not provide detailed measures aimed directly at avoiding exacerbation of FCV-related vulnerabilities.
+**Score:** 2
+**Probabilities:** 
+- score 0 [0], score 1 [0.1], score 2 [0.8], score 3 [0.1]
+
+#### Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
+**Analysis:** The PAD outlines institutional strengthening and capacity-building components aimed at enhancing the abilities of local agencies to deal with emerging challenges. However, it lacks detailed mechanisms or adaptive strategies specifically tailored to changing FCV conditions as they evolve during implementation. 
+**Score:** 1
+**Probabilities:** 
+- score 0 [0], score 1 [0.5], score 2 [0.5]
+
+#### Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
+**Analysis:** The PAD mentions improvements to urban infrastructure that would contribute to long-term resilience, but it doesn't explicitly articulate a balanced approach between immediate interventions and long-term resilience planning. There is a lack of clear indicators that address how immediate needs will be effectively balanced with sustainable development goals.
+**Score:** 1
+**Probabilities:** 
+- score 0 [0], score 1 [0.6], score 2 [0.4]
+
+### Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+
+#### Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
+**Analysis:** The PAD highlights the need for improved governance and equitable access to urban services but does not explicitly link these to identified root causes of FCV. The language suggests awareness, but there are no direct interventions aimed at addressing these root causes, such as resource allocation strategies or community engagement frameworks.
+**Score:** 1
+**Probabilities:** 
+- score 0 [0], score 1 [0.7], score 2 [0.3]
+
+#### Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
+**Analysis:** The PAD discusses the importance of social cohesion and community engagement but lacks concrete peacebuilding strategies or approaches that facilitate trust-building among communities affected by the project. The potential for conflict resolution mechanisms to be integrated into the project remains underexplored.
+**Score:** 1
+**Probabilities:** 
+- score 0 [0], score 1 [0.8], score 2 [0.2]
+
+### Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+
+#### Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
+**Analysis:** The PAD acknowledges the presence of vulnerable populations and proposes a gender strategy that aims to support impacted groups, such as women and displaced households. However, it lacks detailed plans or measures explicitly targeting these groups within the project design.
+**Score:** 2
+**Probabilities:** 
+- score 0 [0], score 1 [0.2], score 2 [0.7], score 3 [0.1]
+
+#### Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
+**Analysis:** The PAD outlines a framework for equitable benefit-sharing and addresses potential social impacts, but it is vague on how these mechanisms will be implemented and monitored throughout the project lifecycle. More clarity and detail are needed.
+**Score:** 1
+**Probabilities:** 
+- score 0 [0], score 1 [0.5], score 2 [0.5]
+
+### Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+
+#### Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
+**Analysis:** The PAD describes the establishment of a Steering Committee and Coordination and Consultative Committees aimed at inter-agency collaboration. However, it does not provide details on how other sectors, such as humanitarian and peacebuilding actors, are integrated into these collaborative efforts.
+**Score:** 2
+**Probabilities:** 
+- score 0 [0], score 1 [0.1], score 2 [0.8], score 3 [0.1]
+
+#### Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
+**Analysis:** The PAD mentions the establishment of structures to facilitate inter-agency coordination and has identified relevant agencies to avoid overlaps. However, it lacks specific mechanisms that outline how conflicts in mandates will be resolved and how duplication will be actively managed.
+**Score:** 1
+**Probabilities:** 
+- score 0 [0], score 1 [0.6], score 2 [0.4]
+
+### Overall Summary:
+The PAD demonstrates a moderate level of awareness regarding FCV sensitivity but lacks depth in several areas, particularly in explicitly linking climate impacts to FCV dynamics, detailing adaptive mechanisms, and providing concrete peacebuilding initiatives. While some safeguards and frameworks are established to address vulnerabilities and promote equity, the document could benefit from a stronger focus on identifying and addressing the root causes of FCV, along with more explicit strategies for engaging vulnerable populations and fostering coordination across relevant sectors. Overall, the PAD shows commitment but needs significant enhancement in specificity and breadth of FCV-sensitive measures.
+"""
+
+test_llm_output_4 = """\
+### Evaluation of the Project Appraisal Document (PAD) for the Sri Lanka Strategic Cities Development Project
+
+---
+
+### Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+
+**Guiding Question 1:** Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?  
+**Analysis:** The PAD acknowledges several challenges that may affect project implementation, including inadequate urban services and infrastructure, institutional fragmentation, and the necessity for integrated planning. However, it does not sufficiently address specific FCV-related barriers such as security risks and community relations. The mention of "capacity risks" at the local level is vague and does not delve into potential conflict implications or community tensions directly arising from these weaknesses.  
+**Probabilities:** score 0 [0.1], score 1 [0.4], score 2 [0.4], score 3 [0.1]
+
+**Guiding Question 2:** To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?  
+**Analysis:** The PAD identifies climate change as a factor that influences urban infrastructure, particularly regarding flooding concerns in Galle. However, it does not comprehensively discuss the interaction between climate impacts and FCV dynamics, especially how these may exacerbate existing vulnerabilities or lead to conflicts. There is a lack of thorough analytics concerning how climate change could heighten fragility or tensions in the affected urban areas.  
+**Probabilities:** score 0 [0.2], score 1 [0.4], score 2 [0.3], score 3 [0.1]
+
+---
+
+### Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+
+**Guiding Question 1:** Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?  
+**Analysis:** While the PAD discusses a Social Management Framework (SMF) and Resettlement Action Framework (RAP) to manage social impacts, it lacks specific safeguards that directly address FCV vulnerabilities related to tensions or conflicts arising from project interventions. The measures mentioned are more focused on environmental and social impacts rather than on FCV-related issues.  
+**Probabilities:** score 0 [0.2], score 1 [0.5], score 2 [0.2], score 3 [0.1]
+
+**Guiding Question 2:** To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?  
+**Analysis:** The PAD does mention the establishment of a PMU with local offices and intends to build capacities of local municipalities. However, the adaptability of these mechanisms to evolving FCV conditions remains unclear. There is no discussion on how the project will adjust to changing dynamics in conflict or fragility over time.  
+**Probabilities:** score 0 [0.3], score 1 [0.5], score 2 [0.2], score 3 [0.0]
+
+**Guiding Question 3:** Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?  
+**Analysis:** The project is primarily focused on immediate urban service improvements without a robust strategy for balancing these with long-term resilience measures. The PAD lacks a clear framework that ties short-term interventions to long-term resilience, particularly in the context of FCV dynamics.  
+**Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+---
+
+### Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+
+**Guiding Question 1:** Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?  
+**Analysis:** While the PAD recognizes the need for improved urban services and infrastructure, it does not address the root causes of FCV effectively, such as inequitable access to resources or governance issues. The considerations for equitable resource distribution are missing, which is crucial in a post-conflict context.  
+**Probabilities:** score 0 [0.2], score 1 [0.5], score 2 [0.2], score 3 [0.1]
+
+**Guiding Question 2:** Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?  
+**Analysis:** There are vague references to fostering social cohesion through urban improvements; however, there’s no explicit strategy or concrete interventions aimed at peacebuilding and conflict resolution. The overall approach appears more focused on infrastructure than on addressing social dynamics and relationships within communities.  
+**Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+---
+
+### Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+
+**Guiding Question 1:** Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?  
+**Analysis:** The PAD acknowledges the need for social assessments and mentions gender considerations; however, it does not sufficiently identify specific vulnerable groups or their needs in detail. The measures provided are generic and lack specificity on how they will be applied to these groups.  
+**Probabilities:** score 0 [0.2], score 1 [0.5], score 2 [0.2], score 3 [0.1]
+
+**Guiding Question 2:** Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?  
+**Analysis:** The PAD mentions a Social Management Framework that aims to address social equity; however, it lacks concrete mechanisms for ensuring that benefits are shared equitably. The general references do not provide a strong assurance against the potential reinforcement of existing inequalities.  
+**Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+---
+
+### Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+
+**Guiding Question 1:** Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?  
+**Analysis:** The PAD outlines a Steering Committee structure intended to facilitate inter-agency collaboration; however, evidence of active collaboration across sectors is limited. While there is a mention of the need for coordination, specifics on how this will be achieved, especially with stakeholders from humanitarian and peacebuilding sectors, are lacking.  
+**Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+**Guiding Question 2:** Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?  
+**Analysis:** The PAD details the establishment of a Steering Committee to address some coordination challenges; however, it does not provide a thorough mechanism for resolving mandate overlaps or ensuring that actions of various actors are aligned. It appears to rely on existing structures without addressing potential gaps.  
+**Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+---
+
+### Overall Summary:
+
+The Project Appraisal Document for the Sri Lanka Strategic Cities Development Project has several strengths, particularly in its recognition of the importance of urban infrastructure and service improvements in post-conflict settings. However, it falls short in addressing the complexities and sensitivities associated with fragility, conflict, and violence (FCV). The document lacks thorough analyses and explicit strategies to address FCV-related barriers, root causes, and the needs of vulnerable populations. Coordination among various stakeholders is outlined but lacks depth, and mechanisms to ensure equitable benefit-sharing are minimal. Overall, while the PAD lays a foundation for urban development, it requires more robust integration of FCV sensitivity assessments to ensure long-term sustainability and peacebuilding in the affected regions.
+"""
+
+test_llm_output_5 = """\
+Here's an evaluation of the Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol:
+
+### Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+
+**Guiding Question:** Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?  
+**Analysis:** The PAD highlights potential risks such as governance issues and capacity weaknesses in local municipalities, which may hinder project implementation. It acknowledges that political and social tensions could arise from local governance challenges. However, the identification of these risks is somewhat general, lacking specific examples or scenarios.  
+**Probabilities:** score 0 [0.1], score 1 [0.3], score 2 [0.4], score 3 [0.2]
+
+**Guiding Question:** To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?  
+**Analysis:** The analysis of the interaction pathways is limited. Although some mention of climate impacts exists, overall, it does not sufficiently explore how these impacts exacerbate FCV issues. A detailed examination into the cause-and-effect relationships is absent, leading to a lower score.  
+**Probabilities:** score 0 [0.2], score 1 [0.4], score 2 [0.3], score 3 [0.1]
+
+---
+
+### Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+
+**Guiding Question:** Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?  
+**Analysis:** The document indicates the development of a Social Management Framework (SMF) to address adverse social impacts, which includes provisions for involuntary resettlement. Nevertheless, it does not present concrete safeguards that directly prevent exacerbation of FCV vulnerabilities.  
+**Probabilities:** score 0 [0.2], score 1 [0.3], score 2 [0.4], score 3 [0.1]
+
+**Guiding Question:** To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?  
+**Analysis:** The document mentions the need to build capacity in local authorities and support adaptive management but lacks detailed mechanisms for how the project will evolve with changes in FCV conditions post-implementation.  
+**Probabilities:** score 0 [0.3], score 1 [0.5], score 2 [0.2], score 3 [0.0]
+
+**Guiding Question:** Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?  
+**Analysis:** While the PAD recognizes the importance of sustainability and long-term environmental improvements, detailed strategies for balancing these against immediate needs are insufficiently developed.  
+**Probabilities:** score 0 [0.2], score 1 [0.3], score 2 [0.4], score 3 [0.1]
+
+---
+
+### Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+
+**Guiding Question:** Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?  
+**Analysis:** The PAD acknowledges governance weaknesses but does not explicitly outline interventions directly targeting these root causes. The focus on social equity is implied but not elaborated.  
+**Probabilities:** score 0 [0.2], score 1 [0.4], score 2 [0.3], score 3 [0.1]
+
+**Guiding Question:** Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?  
+**Analysis:** While some community-focused interventions are mentioned, the PAD lacks a clear, coherent strategy aimed specifically at peacebuilding or fostering social cohesion in conflict-prone areas.   
+**Probabilities:** score 0 [0.3], score 1 [0.5], score 2 [0.2], score 3 [0.0]
+
+---
+
+### Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+
+**Guiding Question:** Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?  
+**Analysis:** The document notes the existence of a Social Assessment but does not adequately identify specific vulnerable populations or detail measures designed for their support.  
+**Probabilities:** score 0 [0.1], score 1 [0.6], score 2 [0.3], score 3 [0.0]
+
+**Guiding Question:** Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?  
+**Analysis:** Although the PAD includes some mechanism for compensation regarding involuntary displacement, it lacks comprehensive strategies for ensuring equitable benefit-sharing across diverse community groups.  
+**Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+---
+
+### Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+
+**Guiding Question:** Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?  
+**Analysis:** The establishment of a Project Coordination and Consultative Committee indicates some effort towards stakeholder engagement, though details on collaborative strategies and outcomes are limited.  
+**Probabilities:** score 0 [0.2], score 1 [0.3], score 2 [0.4], score 3 [0.1]
+
+**Guiding Question:** Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?  
+**Analysis:** The PAD mentions institutional arrangements but does not offer concrete mechanisms to actively align actions among varied stakeholders, leading to potential issues in coordination.  
+**Probabilities:** score 0 [0.3], score 1 [0.5], score 2 [0.2], score 3 [0.0]
+
+---
+
+### Overall Summary
+The PAD demonstrates some awareness of FCV sensitivity, particularly through the recognition of risks and the establishment of frameworks for social management and stakeholder coordination. However, it lacks specific strategies for addressing root causes of FCV, and opportunities for adaptive management based on evolving conditions are not thoroughly explored. The need for enhanced detail on vulnerable populations and collaborative mechanisms is evident, hampering its effectiveness in addressing FCV sensitivities comprehensively. Overall, while the PAD has merits, it requires substantial improvements to meet FCV-sensitive standards effectively.
+
+---
+🧮 **Usage Summary**
+- Input tokens: 8027
+- Output tokens: 1404
+- 💰 Estimated cost: $0.06119
+"""
 
 def extract_score_probabilities_and_scores(llm_output: str):
     """
@@ -171,7 +402,7 @@ def extract_score_probabilities_and_scores(llm_output: str):
             continue
         
         # Match guiding question
-        question_match = re.match(r'.*Guiding Question: (.+)', line)
+        question_match = re.match(r'.*Guiding Question(.+)', line)
         if question_match and characteristic:
             question = question_match.group(1).strip()
             output[characteristic].append({
@@ -192,11 +423,13 @@ def extract_score_probabilities_and_scores(llm_output: str):
                 'score_3': probs[3],
             }
 
+            # print(f"Line {line_number}: {probs_dict}")
+
             # Get all indices (scores) with the maximum probability
             max_prob = max(probs)
             max_score = probs.index(max_prob)
 
-            output[characteristic].append({'probabilities': probs_dict})
+            output[characteristic][-1]['probabilities'] = probs_dict
             output[characteristic][-1]['score'] = max_score
             total_score += max_score
 
@@ -206,6 +439,6 @@ def extract_score_probabilities_and_scores(llm_output: str):
 
 # Example usage
 if __name__ == "__main__":
-    scores, total_score = extract_score_probabilities_and_scores(test_llm_output)
+    scores, total_score = extract_score_probabilities_and_scores(test_llm_output_5)
     print(json.dumps(scores, indent=4))
     print(f"Total Score: {total_score}")

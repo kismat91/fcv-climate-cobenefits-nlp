@@ -1361,7 +1361,7 @@ Output Format:
 For each characteristic, provide the following:
 Guiding Question: [Question]
 Analysis: [Detailed analysis of how the PAD addresses the question]
-Probabilities: (give an array of probabilities for all possible scores with their corresponding scores like below, only if probability is more than 0)
+Probabilities: (give an array of probabilities for all possible scores with their corresponding scores like below)
 (Ensure that the sum of probabilities across all possible scores for each question is always equal to 1)
 score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
@@ -1373,55 +1373,55 @@ Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program
 
 Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
 
 Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
 
 Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
 
 Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
 
 Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
 Analysis: [Your analysis here]
-Probabilities: [probabilities for each score]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
 
 
 Overall Summary: [Brief summary of the PAD's FCV sensitivity, highlighting strengths and weaknesses]
