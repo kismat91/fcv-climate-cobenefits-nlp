@@ -17,7 +17,6 @@ from pymongo import MongoClient
 from prompts import ALL_PROMPTS
 import uuid
 import hashlib
-
 from extract_output import extract_report_content
 
 # Load environment variables
@@ -359,25 +358,78 @@ def get_usage_history_df():
     return pd.DataFrame(st.session_state["usage_history"])
 
 
-def export_report_as_pdf(response_text):
+def export_report_as_pdf(extracted_results, summary):
+    """
+    Export the extracted results and total score as a PDF.
+    """
     pdf_buffer = BytesIO()
     doc = SimpleDocTemplate(pdf_buffer)
     styles = getSampleStyleSheet()
-    lines = response_text.split("\n")
-    story = [Paragraph(line, styles["Normal"]) for line in lines]
+    story = []
+
+    def clean_text(text):
+        return text.replace("*", "").strip()
+
+    # Add the title & total score
+    story.append(Paragraph("Evaluation of the Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol", styles["Heading1"]))
+    story.append(Paragraph(f"Total FCV Sensitivity Score: {summary['total_score']}", styles["Heading2"]))
+    story.append(Paragraph("<br/>", styles["Normal"]))
+
+    # Add the overall summary
+    if summary['overall_summary']:
+        story.append(Paragraph("<b>Overall Summary:</b>", styles["Heading3"]))
+        story.append(Paragraph(clean_text(summary['overall_summary']), styles["Normal"]))
+        story.append(Paragraph("<br/>", styles["Normal"]))
+
+    # Add the extracted results
+    for characteristic, questions in extracted_results.items():
+        story.append(Paragraph(f"Characteristic: {clean_text(characteristic)}", styles["Heading3"]))
+        story.append(Paragraph("<br/>", styles["Normal"]))
+
+        for question_data in questions:
+            story.append(Paragraph(f"<b>Guiding Question:</b> {clean_text(question_data['question'])}", styles["Normal"]))
+            story.append(Paragraph("<br/>", styles["Normal"]))
+
+            story.append(Paragraph(f"<b>Analysis:</b> {clean_text(question_data['analysis'])}", styles["Normal"]))
+            story.append(Paragraph("<br/>", styles["Normal"]))
+
+            story.append(Paragraph(f"<b>Score:</b> {question_data['score']}", styles["Normal"]))
+            story.append(Paragraph("<br/>", styles["Normal"]))
+
+            probabilities = question_data['probabilities']
+            prob_line = ", ".join([f"{score}: {probability:.2f}" for score, probability in probabilities.items()])
+            story.append(Paragraph(f"<b>Probabilities:</b> {prob_line}", styles["Normal"]))
+            story.append(Paragraph("<br/>", styles["Normal"]))
+
+    # Build the PDF
     doc.build(story)
-    return pdf_buffer.getvalue()
+    pdf_data = pdf_buffer.getvalue()
+    pdf_buffer.close()
+    return pdf_data
 
+# Display Extracted Results
+def display_extracted_results(extracted_results, summary):
+    """
+    Display results extracted from the extract_report_content function.
+    """
 
-def export_report_as_csv(response_text):
-    lines = response_text.split("\n")
-    df = pd.DataFrame({"Analysis": lines})
-    return df.to_csv(index=False).encode("utf-8")
+    st.subheader("Extracted Results")
+    st.write(f"**Total FCV Sensitivity Score:** {summary['total_score']}")
 
+    # Display the overall summary
+    if summary['overall_summary']:
+        st.subheader("Overall Summary")
+        st.markdown(summary['overall_summary'])
 
-def export_report_as_json(response_text):
-    lines = response_text.split("\n")
-    return json.dumps({"analysis": lines}, indent=2).encode("utf-8")
+    for characteristic, questions in extracted_results.items():
+        with st.expander(f"Characteristic: {characteristic}", expanded=True):
+            for question_data in questions:
+                st.markdown(f"**Question:** {question_data['question']}")
+                st.markdown(f"**Analysis:** {question_data['analysis']}")
+                st.markdown(f"**Score:** {question_data['score']}")
+                st.markdown(f"**Probabilities:** {question_data['probabilities']}")
+                st.markdown("---")
+
 
 
 ###########################################
@@ -449,22 +501,18 @@ def main():
                     # Simulate a brief delay for UX purposes.
                     import time
                     time.sleep(1)
-                with st.sidebar.expander("Report Preview", expanded=True):
-                    st.markdown("### Report")
-                    st.text_area("Report Content", report_text, height=200, disabled=True)
+                with st.sidebar.expander("Output Preview", expanded=True):
+                    st.markdown("### Output")
+                    st.text_area("Output Content", report_text, height=200, disabled=True)
 
                     # Extract and display results in the main app (not nested in the sidebar expander)
                     st.subheader("Extracted Results from Report")
-                    extracted_results, total_score = extract_report_content(report_text)
+                    extracted_results, summary = extract_report_content(report_text)
 
-                    st.write(f"**Total FCV Sensitivity Score:** {total_score}")
-                    # for characteristic, questions in extracted_results.items():
-                    #     with st.markdown(f"### Characteristic: {characteristic}"):
-                    #         for question_data in questions:
-                    #             st.markdown(f"**Question:** {question_data.get('question', 'N/A')}")
-                    #             st.markdown(f"**Score:** {question_data.get('score', 'N/A')}")
-                    #             st.markdown(f"**Probabilities:** {question_data.get('probabilities', 'N/A')}")
-                    #             st.markdown("---")
+                    st.write(f"**Total FCV Sensitivity Score:** {summary['total_score']}")
+                    if summary['overall_summary']:
+                        st.subheader("Overall Summary")
+                        st.markdown(summary['overall_summary'])
 
                     # Prepare a list to hold the data for the table
                     table_data = []
@@ -487,7 +535,7 @@ def main():
                         st.write("No results to display.")
                 
                 # Provide a download button for the report
-                st.sidebar.download_button("Download Report (PDF)", data=export_report_as_pdf(report_text),
+                st.sidebar.download_button("Download Report (PDF)", data=export_report_as_pdf(extracted_results, summary),
                                            file_name="report.pdf", mime="application/pdf")
         else:
             st.sidebar.info("Select and index a document to generate a report.")
