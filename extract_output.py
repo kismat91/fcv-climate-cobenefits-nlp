@@ -149,86 +149,86 @@ The PAD shows a moderate effort to address FCV sensitivity issues, particularly 
 - 💰 Estimated cost: $0.05867
 """
 
-test_llm_output_3 = """\
-### Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
+# test_llm_output_3 = """\
+# ### Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
 
-#### Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
-**Analysis:** The PAD identifies various risks related to project implementation, including institutional weaknesses and fragmentation of responsibilities among multiple agencies. It acknowledges the challenges posed by the relatively weak capacity of local authorities in Kandy and Galle, which could impact the project's success. However, it lacks a thorough exploration of specific security risks and community relations issues that could hinder implementation. 
-**Score:** 2
-**Probabilities:** 
-- score 0 [0], score 1 [0.2], score 2 [0.6], score 3 [0.2]
+# #### Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?
+# **Analysis:** The PAD identifies various risks related to project implementation, including institutional weaknesses and fragmentation of responsibilities among multiple agencies. It acknowledges the challenges posed by the relatively weak capacity of local authorities in Kandy and Galle, which could impact the project's success. However, it lacks a thorough exploration of specific security risks and community relations issues that could hinder implementation. 
+# **Score:** 2
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.2], score 2 [0.6], score 3 [0.2]
 
-#### Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
-**Analysis:** The PAD mentions the impact of climate change on flooding in Galle, acknowledging increased rainfall intensity. However, it does not delve deeply into how these climate impacts create or exacerbate existing FCV dynamics within the project regions. There's a need for more explicit connections drawn between climate impacts and potential conflict or violence scenarios.
-**Score:** 1
-**Probabilities:** 
-- score 0 [0], score 1 [0.7], score 2 [0.3]
+# #### Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?
+# **Analysis:** The PAD mentions the impact of climate change on flooding in Galle, acknowledging increased rainfall intensity. However, it does not delve deeply into how these climate impacts create or exacerbate existing FCV dynamics within the project regions. There's a need for more explicit connections drawn between climate impacts and potential conflict or violence scenarios.
+# **Score:** 1
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.7], score 2 [0.3]
 
-### Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
+# ### Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation
 
-#### Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
-**Analysis:** The PAD outlines various safeguards, including a Resettlement Policy Framework and Environmental Assessment and Management Framework. It indicates that steps will be taken to mitigate adverse impacts on local communities. However, it does not provide detailed measures aimed directly at avoiding exacerbation of FCV-related vulnerabilities.
-**Score:** 2
-**Probabilities:** 
-- score 0 [0], score 1 [0.1], score 2 [0.8], score 3 [0.1]
+# #### Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
+# **Analysis:** The PAD outlines various safeguards, including a Resettlement Policy Framework and Environmental Assessment and Management Framework. It indicates that steps will be taken to mitigate adverse impacts on local communities. However, it does not provide detailed measures aimed directly at avoiding exacerbation of FCV-related vulnerabilities.
+# **Score:** 2
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.1], score 2 [0.8], score 3 [0.1]
 
-#### Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
-**Analysis:** The PAD outlines institutional strengthening and capacity-building components aimed at enhancing the abilities of local agencies to deal with emerging challenges. However, it lacks detailed mechanisms or adaptive strategies specifically tailored to changing FCV conditions as they evolve during implementation. 
-**Score:** 1
-**Probabilities:** 
-- score 0 [0], score 1 [0.5], score 2 [0.5]
+# #### Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?
+# **Analysis:** The PAD outlines institutional strengthening and capacity-building components aimed at enhancing the abilities of local agencies to deal with emerging challenges. However, it lacks detailed mechanisms or adaptive strategies specifically tailored to changing FCV conditions as they evolve during implementation. 
+# **Score:** 1
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.5], score 2 [0.5]
 
-#### Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
-**Analysis:** The PAD mentions improvements to urban infrastructure that would contribute to long-term resilience, but it doesn't explicitly articulate a balanced approach between immediate interventions and long-term resilience planning. There is a lack of clear indicators that address how immediate needs will be effectively balanced with sustainable development goals.
-**Score:** 1
-**Probabilities:** 
-- score 0 [0], score 1 [0.6], score 2 [0.4]
+# #### Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?
+# **Analysis:** The PAD mentions improvements to urban infrastructure that would contribute to long-term resilience, but it doesn't explicitly articulate a balanced approach between immediate interventions and long-term resilience planning. There is a lack of clear indicators that address how immediate needs will be effectively balanced with sustainable development goals.
+# **Score:** 1
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.6], score 2 [0.4]
 
-### Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
+# ### Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding
 
-#### Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
-**Analysis:** The PAD highlights the need for improved governance and equitable access to urban services but does not explicitly link these to identified root causes of FCV. The language suggests awareness, but there are no direct interventions aimed at addressing these root causes, such as resource allocation strategies or community engagement frameworks.
-**Score:** 1
-**Probabilities:** 
-- score 0 [0], score 1 [0.7], score 2 [0.3]
+# #### Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?
+# **Analysis:** The PAD highlights the need for improved governance and equitable access to urban services but does not explicitly link these to identified root causes of FCV. The language suggests awareness, but there are no direct interventions aimed at addressing these root causes, such as resource allocation strategies or community engagement frameworks.
+# **Score:** 1
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.7], score 2 [0.3]
 
-#### Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
-**Analysis:** The PAD discusses the importance of social cohesion and community engagement but lacks concrete peacebuilding strategies or approaches that facilitate trust-building among communities affected by the project. The potential for conflict resolution mechanisms to be integrated into the project remains underexplored.
-**Score:** 1
-**Probabilities:** 
-- score 0 [0], score 1 [0.8], score 2 [0.2]
+# #### Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?
+# **Analysis:** The PAD discusses the importance of social cohesion and community engagement but lacks concrete peacebuilding strategies or approaches that facilitate trust-building among communities affected by the project. The potential for conflict resolution mechanisms to be integrated into the project remains underexplored.
+# **Score:** 1
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.8], score 2 [0.2]
 
-### Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
+# ### Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups
 
-#### Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
-**Analysis:** The PAD acknowledges the presence of vulnerable populations and proposes a gender strategy that aims to support impacted groups, such as women and displaced households. However, it lacks detailed plans or measures explicitly targeting these groups within the project design.
-**Score:** 2
-**Probabilities:** 
-- score 0 [0], score 1 [0.2], score 2 [0.7], score 3 [0.1]
+# #### Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?
+# **Analysis:** The PAD acknowledges the presence of vulnerable populations and proposes a gender strategy that aims to support impacted groups, such as women and displaced households. However, it lacks detailed plans or measures explicitly targeting these groups within the project design.
+# **Score:** 2
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.2], score 2 [0.7], score 3 [0.1]
 
-#### Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
-**Analysis:** The PAD outlines a framework for equitable benefit-sharing and addresses potential social impacts, but it is vague on how these mechanisms will be implemented and monitored throughout the project lifecycle. More clarity and detail are needed.
-**Score:** 1
-**Probabilities:** 
-- score 0 [0], score 1 [0.5], score 2 [0.5]
+# #### Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?
+# **Analysis:** The PAD outlines a framework for equitable benefit-sharing and addresses potential social impacts, but it is vague on how these mechanisms will be implemented and monitored throughout the project lifecycle. More clarity and detail are needed.
+# **Score:** 1
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.5], score 2 [0.5]
 
-### Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
+# ### Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors
 
-#### Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
-**Analysis:** The PAD describes the establishment of a Steering Committee and Coordination and Consultative Committees aimed at inter-agency collaboration. However, it does not provide details on how other sectors, such as humanitarian and peacebuilding actors, are integrated into these collaborative efforts.
-**Score:** 2
-**Probabilities:** 
-- score 0 [0], score 1 [0.1], score 2 [0.8], score 3 [0.1]
+# #### Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?
+# **Analysis:** The PAD describes the establishment of a Steering Committee and Coordination and Consultative Committees aimed at inter-agency collaboration. However, it does not provide details on how other sectors, such as humanitarian and peacebuilding actors, are integrated into these collaborative efforts.
+# **Score:** 2
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.1], score 2 [0.8], score 3 [0.1]
 
-#### Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
-**Analysis:** The PAD mentions the establishment of structures to facilitate inter-agency coordination and has identified relevant agencies to avoid overlaps. However, it lacks specific mechanisms that outline how conflicts in mandates will be resolved and how duplication will be actively managed.
-**Score:** 1
-**Probabilities:** 
-- score 0 [0], score 1 [0.6], score 2 [0.4]
+# #### Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?
+# **Analysis:** The PAD mentions the establishment of structures to facilitate inter-agency coordination and has identified relevant agencies to avoid overlaps. However, it lacks specific mechanisms that outline how conflicts in mandates will be resolved and how duplication will be actively managed.
+# **Score:** 1
+# **Probabilities:** 
+# - score 0 [0], score 1 [0.6], score 2 [0.4]
 
-### Overall Summary:
-The PAD demonstrates a moderate level of awareness regarding FCV sensitivity but lacks depth in several areas, particularly in explicitly linking climate impacts to FCV dynamics, detailing adaptive mechanisms, and providing concrete peacebuilding initiatives. While some safeguards and frameworks are established to address vulnerabilities and promote equity, the document could benefit from a stronger focus on identifying and addressing the root causes of FCV, along with more explicit strategies for engaging vulnerable populations and fostering coordination across relevant sectors. Overall, the PAD shows commitment but needs significant enhancement in specificity and breadth of FCV-sensitive measures.
-"""
+# ### Overall Summary:
+# The PAD demonstrates a moderate level of awareness regarding FCV sensitivity but lacks depth in several areas, particularly in explicitly linking climate impacts to FCV dynamics, detailing adaptive mechanisms, and providing concrete peacebuilding initiatives. While some safeguards and frameworks are established to address vulnerabilities and promote equity, the document could benefit from a stronger focus on identifying and addressing the root causes of FCV, along with more explicit strategies for engaging vulnerable populations and fostering coordination across relevant sectors. Overall, the PAD shows commitment but needs significant enhancement in specificity and breadth of FCV-sensitive measures.
+# """
 
 test_llm_output_4 = """\
 ### Evaluation of the Project Appraisal Document (PAD) for the Sri Lanka Strategic Cities Development Project
@@ -381,40 +381,48 @@ The PAD demonstrates some awareness of FCV sensitivity, particularly through the
 - 💰 Estimated cost: $0.06119
 """
 
-def extract_score_probabilities_and_scores(llm_output: str):
+def extract_report_content(llm_output: str):
     """
     Extract scores and probabilities from the LLM output.
     """
     output = {}
     total_score = 0
     characteristic = None
-    line_number = 0
+    current_question = None
+    overall_summary = None
 
     lines = llm_output.split('\n')
-    for line in lines:
-        line_number += 1
+    for i, line in enumerate(lines):
         # Match characteristic headers
         char_match = re.match(r'.*Characteristic \d+: (.+)', line)
         if char_match:
             characteristic = char_match.group(1).strip()
             output[characteristic] = []
-            # question_index = 0
             continue
         
         # Match guiding question
         question_match = re.match(r'.*Guiding Question(.+)', line)
         if question_match and characteristic:
-            question = question_match.group(1).strip()
+            current_question = question_match.group(1).strip()
             output[characteristic].append({
-                'question': question,
+                'question': current_question,
+                'analysis': None,
                 'probabilities': {},
                 'score': None
             })
             continue
         
+        # Match analysis line
+        analysis_match = re.match(r'\*\*Analysis:\*\* (.+)', line)
+        if analysis_match and characteristic and current_question:
+            analysis = analysis_match.group(1).strip()
+            if output[characteristic]:
+                output[characteristic][-1]['analysis'] = analysis
+            continue
+        
         # Match probabilities line
         prob_match = re.match(r'.*score 0 \[(\d+(\.\d+)?)\], score 1 \[(\d+(\.\d+)?)\], score 2 \[(\d+(\.\d+)?)\], score 3 \[(\d+(\.\d+)?)\]', line)
-        if prob_match and characteristic:
+        if prob_match and characteristic and current_question:
             probs = list(map(float, prob_match.groups()[::2]))
             probs_dict = {
                 'score_0': probs[0],
@@ -423,8 +431,6 @@ def extract_score_probabilities_and_scores(llm_output: str):
                 'score_3': probs[3],
             }
 
-            # print(f"Line {line_number}: {probs_dict}")
-
             # Get all indices (scores) with the maximum probability
             max_prob = max(probs)
             max_score = probs.index(max_prob)
@@ -432,13 +438,34 @@ def extract_score_probabilities_and_scores(llm_output: str):
             output[characteristic][-1]['probabilities'] = probs_dict
             output[characteristic][-1]['score'] = max_score
             total_score += max_score
+            continue
 
-    return output, total_score
+        # Match overall summary (on the same line or subsequent lines)
+        if "Overall Summary" in line:
+            summary_line = line.split("Overall Summary", 1)[1].strip(":").strip()
+            if summary_line:
+                overall_summary = summary_line
+            else:
+                # Check the next line(s) for the summary
+                for j in range(i + 1, len(lines)):
+                    next_line = lines[j].strip()
+                    if next_line:
+                        overall_summary = next_line
+                        break
+
+    # Combine total_score and overall_summary into a single dictionary
+    summary = {
+        "total_score": total_score,
+        "overall_summary": overall_summary
+    }
+
+    return output, summary
 
 
 
 # Example usage
 if __name__ == "__main__":
-    scores, total_score = extract_score_probabilities_and_scores(test_llm_output_5)
+    scores, summary = extract_report_content(test_llm_output)
     print(json.dumps(scores, indent=4))
-    print(f"Total Score: {total_score}")
+    print(f"Total Score: {summary['total_score']}")
+    print(f"Overall Summary: {summary['overall_summary']}")

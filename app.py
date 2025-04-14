@@ -11,12 +11,13 @@ from io import BytesIO
 from datetime import datetime
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
-from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from pymongo import MongoClient
 from prompts import ALL_PROMPTS
 
-from extract_scores import extract_score_probabilities_and_scores
+from extract_output import extract_report_content
 
 # Load environment variables
 load_dotenv()
@@ -252,55 +253,132 @@ def get_usage_history_df():
         st.session_state["usage_history"] = []
     return pd.DataFrame(st.session_state["usage_history"])
 
-def export_report_as_pdf(response_text):
+def export_report_as_pdf(extracted_results, summary):
     """
-    Export AI-generated analysis report as a PDF.
+    Export the extracted results and total score as a PDF.
     """
     pdf_buffer = BytesIO()
     doc = SimpleDocTemplate(pdf_buffer)
     styles = getSampleStyleSheet()
-    lines = response_text.split("\n")
     story = []
-    for line in lines:
-        story.append(Paragraph(line, styles["Normal"]))
+
+    def clean_text(text):
+        return text.replace("*", "").strip()
+
+    # Add the title & total score
+    story.append(Paragraph("Evaluation of the Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol", styles["Heading1"]))
+    story.append(Paragraph(f"Total FCV Sensitivity Score: {summary['total_score']}", styles["Heading2"]))
+    story.append(Paragraph("<br/>", styles["Normal"]))
+
+    # Add the overall summary
+    if summary['overall_summary']:
+        story.append(Paragraph("<b>Overall Summary:</b>", styles["Heading3"]))
+        story.append(Paragraph(clean_text(summary['overall_summary']), styles["Normal"]))
+        story.append(Paragraph("<br/>", styles["Normal"]))
+
+    # Add the extracted results
+    for characteristic, questions in extracted_results.items():
+        story.append(Paragraph(f"Characteristic: {clean_text(characteristic)}", styles["Heading3"]))
+        story.append(Paragraph("<br/>", styles["Normal"]))
+
+        for question_data in questions:
+            story.append(Paragraph(f"<b>Guiding Question:</b> {clean_text(question_data['question'])}", styles["Normal"]))
+            story.append(Paragraph("<br/>", styles["Normal"]))
+
+            story.append(Paragraph(f"<b>Analysis:</b> {clean_text(question_data['analysis'])}", styles["Normal"]))
+            story.append(Paragraph("<br/>", styles["Normal"]))
+
+            story.append(Paragraph(f"<b>Score:</b> {question_data['score']}", styles["Normal"]))
+            story.append(Paragraph("<br/>", styles["Normal"]))
+
+            probabilities = question_data['probabilities']
+            prob_line = ", ".join([f"{score}: {probability:.2f}" for score, probability in probabilities.items()])
+            story.append(Paragraph(f"<b>Probabilities:</b> {prob_line}", styles["Normal"]))
+            story.append(Paragraph("<br/>", styles["Normal"]))
+
+    # Build the PDF
     doc.build(story)
     pdf_data = pdf_buffer.getvalue()
+    pdf_buffer.close()
     return pdf_data
 
-def export_report_as_csv(response_text):
+def export_report_as_csv(extracted_results, summary):
     """
-    Export AI-generated analysis report as a CSV.
+    Export the extracted results and total score as a CSV.
     """
-    lines = response_text.split("\n")
-    df = pd.DataFrame({"Analysis": lines})
+    # Prepare data for the CSV
+    csv_data = []
+    for characteristic, questions in extracted_results.items():
+        for question_data in questions:
+            csv_data.append({
+                "Characteristic": characteristic,
+                "Question": question_data["question"],
+                "Analysis": question_data["analysis"],
+                "Score": question_data["score"],
+                "Probabilities": question_data["probabilities"]
+            })
+
+    # Add overall summary as a separate row
+    if summary['overall_summary']:
+        csv_data.append({
+            "Characteristic": "Overall Summary",
+            "Question": "",
+            "Analysis": summary['overall_summary'],
+            "Score": "",
+            "Probabilities": ""
+        })
+
+    # Add total score as a separate row
+    csv_data.append({
+        "Characteristic": "Total",
+        "Question": "",
+        "Analysis": "",
+        "Score": summary['total_score'],
+        "Probabilities": ""
+    })
+
+    # Convert to DataFrame
+    df = pd.DataFrame(csv_data)
+
+    # Export to CSV
     return df.to_csv(index=False).encode("utf-8")
 
-def export_report_as_json(response_text):
+def export_report_as_json(extracted_results, summary):
     """
-    Export AI-generated analysis report as a JSON.
+    Export the extracted results and total score as a JSON.
     """
-    lines = response_text.split("\n")
-    return json.dumps({"analysis": lines}, indent=2).encode("utf-8")
+    # Prepare the JSON structure
+    report_data = {
+        "summary": summary,
+        "results": extracted_results
+    }
+
+    # Convert to JSON string
+    return json.dumps(report_data, indent=4).encode("utf-8")
 
 # Display Extracted Results
-def display_extracted_results(llm_output):
+def display_extracted_results(extracted_results, summary):
     """
-    Display results extracted from the extract_score_probabilities_and_scores function.
+    Display results extracted from the extract_report_content function.
     """
-
-    extracted_results, total_score = extract_score_probabilities_and_scores(llm_output)
 
     st.subheader("Extracted Results")
-    st.write(f"**Total FCV Sensitivity Score:** {total_score}")
+    st.write(f"**Total FCV Sensitivity Score:** {summary['total_score']}")
+
+    # Display the overall summary
+    if summary['overall_summary']:
+        st.subheader("Overall Summary")
+        st.markdown(summary['overall_summary'])
 
     for characteristic, questions in extracted_results.items():
-        with st.expander(f"Characteristic: {characteristic}", expanded=False):
+        with st.expander(f"Characteristic: {characteristic}", expanded=True):
             for question_data in questions:
                 st.markdown(f"**Question:** {question_data['question']}")
+                st.markdown(f"**Analysis:** {question_data['analysis']}")
                 st.markdown(f"**Score:** {question_data['score']}")
                 st.markdown(f"**Probabilities:** {question_data['probabilities']}")
                 st.markdown("---")
-                
+
 ############################################################
 # MongoDB Helpers
 ############################################################
@@ -505,8 +583,10 @@ def main():
                 with st.expander("Click to expand AI Analysis", expanded=True):
                     st.markdown(f"```\n{color_coded_response}\n```")
 
+                extracted_results, summary = extract_report_content(response_text)
+
                 # Display extracted results
-                display_extracted_results(response_text)
+                display_extracted_results(extracted_results, summary)
 
                 # Token and cost breakdown
                 st.subheader("📌 Token & Cost Usage")
@@ -523,9 +603,9 @@ def main():
                 # Export options
                 st.subheader("📤 Export Analysis")
                 st.caption("Use the download buttons below to get your analysis report.")
-                pdf_data = export_report_as_pdf(response_text)
-                csv_data = export_report_as_csv(response_text)
-                json_data = export_report_as_json(response_text)
+                pdf_data = export_report_as_pdf(extracted_results, summary)
+                csv_data = export_report_as_csv(extracted_results, summary)
+                json_data = export_report_as_json(extracted_results, summary)
                 st.download_button(
                     label="Download PDF",
                     data=pdf_data,

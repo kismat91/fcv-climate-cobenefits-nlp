@@ -18,7 +18,7 @@ from prompts import ALL_PROMPTS
 import uuid
 import hashlib
 
-from extract_scores import extract_score_probabilities_and_scores
+from extract_output import extract_report_content
 
 # Load environment variables
 load_dotenv()
@@ -455,8 +455,7 @@ def main():
 
                     # Extract and display results in the main app (not nested in the sidebar expander)
                     st.subheader("Extracted Results from Report")
-                    from extract_scores import extract_score_probabilities_and_scores
-                    extracted_results, total_score = extract_score_probabilities_and_scores(report_text)
+                    extracted_results, total_score = extract_report_content(report_text)
 
                     st.write(f"**Total FCV Sensitivity Score:** {total_score}")
                     # for characteristic, questions in extracted_results.items():
