@@ -381,6 +381,67 @@ The PAD demonstrates some awareness of FCV sensitivity, particularly through the
 - 💰 Estimated cost: $0.06119
 """
 
+test_llm_output_6 = """\
+### Evaluation of the Project Appraisal Document (PAD) on FCV Sensitivity
+
+**Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery**
+
+- **Guiding Question: Does the PAD explicitly identify risks to project implementation from FCV-related barriers (e.g., security risks, institutional weaknesses, or strained community relations)?**
+  - **Analysis:** The PAD does mention various barriers to effective implementation, including the risks of social unrest and governance challenges stemming from Nepal's history of conflict. It recognizes the need for coordinated inter-agency efforts due to institutional weaknesses. However, it lacks explicit details on specific security risks or community relations issues that could impact project delivery.
+  - **Probabilities:** score 0 [0.1], score 1 [0.4], score 2 [0.4], score 3 [0.1]
+
+- **Guiding Question: To what extent does the PAD seek to identify the specific pathways through which climate impacts interact with FCV dynamics?**
+  - **Analysis:** The document does not sufficiently delve into the pathways linking climate impacts with FCV dynamics, focusing instead on health and nutrition without adequately addressing how climate change might exacerbate existing vulnerabilities or conflicts.
+  - **Probabilities:** score 0 [0.2], score 1 [0.5], score 2 [0.2], score 3 [0.1]
+
+**Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation**
+
+- **Guiding Question: Does the PAD incorporate specific safeguards to ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?**
+  - **Analysis:** While the PAD outlines various interventions aimed at improving nutrition and health, it fails to detail specific safeguards or mitigation strategies to address potential tensions arising from resource competition or community divides.
+  - **Probabilities:** score 0 [0.3], score 1 [0.5], score 2 [0.2], score 3 [0.0]
+
+- **Guiding Question: To what extent are adaptive mechanisms embedded into the project to accommodate evolving FCV conditions in the country or region?**
+  - **Analysis:** The document mentions periodic assessments and a learning framework, which indicates some level of adaptability. However, it does not robustly outline how these mechanisms will specifically respond to changing FCV conditions or climate impacts.
+  - **Probabilities:** score 0 [0.2], score 1 [0.4], score 2 [0.3], score 3 [0.1]
+
+- **Guiding Question: Does the PAD show evidence of explicit efforts to balance immediate needs with long-term resilience-building in a way that avoids maladaptive outcomes?**
+  - **Analysis:** The PAD presents a focus on immediate nutrition needs but lacks a clear strategy for long-term resilience-building in the context of FCV sensitivity. There is a need for a more integrated approach that combines immediate interventions with sustainable development practices.
+  - **Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+**Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding**
+
+- **Guiding Question: Does the PAD include interventions that explicitly address root causes of FCV, such as inequitable access to resources or weak governance?**
+  - **Analysis:** The PAD identifies some social determinants impacting nutrition, such as gender disparities and lack of education among women. However, it does not sufficiently explore how these factors are interlinked with broader governance and resource allocation issues.
+  - **Probabilities:** score 0 [0.2], score 1 [0.4], score 2 [0.3], score 3 [0.1]
+
+- **Guiding Question: Does the project actively seek to promote peacebuilding, such as fostering trust, social cohesion, or conflict resolution?**
+  - **Analysis:** The project suggests community mobilization and involvement of various stakeholders, which could foster social cohesion. However, there are no explicit mechanisms for peacebuilding or conflict resolution outlined in the PAD.
+  - **Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+**Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups**
+
+- **Guiding Question: Does the PAD explicitly identify vulnerable populations (e.g., women, displaced persons, minorities) and include measures to address their specific needs?**
+  - **Analysis:** The PAD does a commendable job of identifying vulnerable populations, particularly women and children. It outlines some tailored interventions, but lacks comprehensive measures specific to the diverse vulnerabilities within those groups.
+  - **Probabilities:** score 0 [0.2], score 1 [0.3], score 2 [0.4], score 3 [0.1]
+
+- **Guiding Question: Are mechanisms included to ensure equitable benefit-sharing and avoid reinforcing inequalities?**
+  - **Analysis:** Although the PAD mentions the need for equitable access to resources, it does not adequately detail mechanisms to ensure that all groups benefit equitably from interventions, which is critical in a diverse and stratified social landscape.
+  - **Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+**Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors**
+
+- **Guiding Question: Does the PAD demonstrate evidence of active collaboration with stakeholders across sectors (e.g., humanitarian, peacebuilding, disaster risk management)?**
+  - **Analysis:** The PAD indicates some level of collaboration among various sectors but falls short of demonstrating a cohesive strategy for incorporating peacebuilding and disaster risk management actors effectively into the project design.
+  - **Probabilities:** score 0 [0.3], score 1 [0.4], score 2 [0.2], score 3 [0.1]
+
+- **Guiding Question: Does the PAD outline mechanisms to align actions, resolve mandate overlaps, and avoid duplication across relevant actors?**
+  - **Analysis:** The document mentions coordination mechanisms but lacks specific details on how to align actions among different actors or resolve overlaps in mandates, which are crucial for effective implementation.
+  - **Probabilities:** score 0 [0.3], score 1 [0.5], score 2 [0.2], score 3 [0.0]
+
+### Overall Summary
+The PAD for the Sunaula Hazar Din - Community Action for Nutrition Project exhibits strengths in identifying vulnerable populations and outlining interventions aimed at improving nutrition. However, it falls short in addressing the complex interplay of fragility, conflict, and violence in the Nepalese context. Key gaps include a lack of explicit safeguards against FCV-related risks, insufficient attention to the dynamics of climate impacts, and a need for stronger mechanisms to ensure equitable benefit-sharing and promote peacebuilding initiatives. Enhanced focus on these areas would significantly improve the project's sensitivity to FCV issues and its potential for sustainable impact.
+"""
+
 def extract_report_content(llm_output: str):
     """
     Extract scores and probabilities from the LLM output.
@@ -413,7 +474,7 @@ def extract_report_content(llm_output: str):
             continue
         
         # Match analysis line
-        analysis_match = re.match(r'\*\*Analysis:\*\* (.+)', line)
+        analysis_match = re.match(r'.*Analysis(.+)', line)
         if analysis_match and characteristic and current_question:
             analysis = analysis_match.group(1).strip()
             if output[characteristic]:
@@ -465,7 +526,7 @@ def extract_report_content(llm_output: str):
 
 # Example usage
 if __name__ == "__main__":
-    scores, summary = extract_report_content(test_llm_output)
+    scores, summary = extract_report_content(test_llm_output_6)
     print(json.dumps(scores, indent=4))
     print(f"Total Score: {summary['total_score']}")
     print(f"Overall Summary: {summary['overall_summary']}")
