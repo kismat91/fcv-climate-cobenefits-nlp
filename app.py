@@ -16,6 +16,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from pymongo import MongoClient
 from prompts import ALL_PROMPTS
+import re
 
 from extract_output import extract_report_content
 
@@ -356,6 +357,40 @@ def export_report_as_json(extracted_results, summary):
     # Convert to JSON string
     return json.dumps(report_data, indent=4).encode("utf-8")
 
+def export_raw_response_as_pdf(raw_response):
+    """
+    Export the raw response as a PDF with markdown-style formatting.
+    """
+    pdf_buffer = BytesIO()
+    doc = SimpleDocTemplate(pdf_buffer)
+    styles = getSampleStyleSheet()
+    story = []
+
+    # Add a title
+    story.append(Paragraph("AI Analyzer", styles["Heading1"]))
+    story.append(Paragraph("<br/>", styles["Normal"]))
+
+    # Add the raw response in markdown-style formatting
+    for line in raw_response.splitlines():
+        if line.startswith("# "):  # Heading 1
+            story.append(Paragraph(line[2:], styles["Heading1"]))
+        elif line.startswith("## "):  # Heading 2
+            story.append(Paragraph(line[3:], styles["Heading2"]))
+        elif line.startswith("### "):  # Heading 3
+            story.append(Paragraph(line[4:], styles["Heading3"]))
+        elif line.startswith("- "):  # Bullet points
+            story.append(Paragraph(f"• {line[2:]}", styles["Normal"]))
+        else:  # Regular text
+            formatted_line = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", line)
+            story.append(Paragraph(formatted_line, styles["Normal"]))
+        story.append(Paragraph("<br/>", styles["Normal"]))
+
+    # Build the PDF
+    doc.build(story)
+    pdf_data = pdf_buffer.getvalue()
+    pdf_buffer.close()
+    return pdf_data
+
 # Display Extracted Results
 def display_extracted_results(extracted_results, summary):
     """
@@ -583,9 +618,17 @@ def main():
                 with st.expander("Click to expand AI Analysis", expanded=True):
                     st.markdown(f"```\n{color_coded_response}\n```")
 
-                extracted_results, summary = extract_report_content(response_text)
+                # Add a download button for the raw response as a PDF
+                raw_pdf_data = export_raw_response_as_pdf(response_text)
+                st.download_button(
+                    label="Download Raw Response as PDF",
+                    data=raw_pdf_data,
+                    file_name="raw_response.pdf",
+                    mime="application/pdf"
+                )
 
-                # Display extracted results
+                # extract & display results 
+                extracted_results, summary = extract_report_content(response_text)
                 display_extracted_results(extracted_results, summary)
 
                 # Token and cost breakdown
