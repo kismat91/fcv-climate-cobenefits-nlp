@@ -1428,7 +1428,17 @@ Overall Summary: [Brief summary of the PAD's FCV sensitivity, highlighting stren
 """
 
 PROMPT_NEW = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0-3) for each question and provide a detailed analysis to justify your score.
+
+Output Format: [give the output only in the format below]
+For each characteristic, provide the following:
+Guiding Question: [Question]
+Analysis: [Detailed analysis of how the PAD addresses the question]
+Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
+(give an array of probabilities for all possible scores with their corresponding scores like below)
 (Ensure that the sum of probabilities across all possible scores for each question is always equal to 1)
+
+At the end, provide:
+Summary: [Brief summary of the PAD's FCV sensitivity]
 
 Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery
 Revised Guiding Question: Does the PAD recognize FCV as a key risk in both the background and key risks sections, and does it identify specific pathways through which climate impacts (e.g., floods, droughts, storms) interact with FCV dynamics (e.g., resource scarcity, governance challenges, social tensions)?
