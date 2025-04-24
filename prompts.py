@@ -1902,6 +1902,279 @@ Score: [0–3 or half-point]
 [Brief summary of the PAD's FCV sensitivity, highlighting both strengths and weaknesses across climate–conflict linkages, risk mitigation, adaptive design, peacebuilding alignment, equity, and coordination mechanisms.]
 """
 
+PROMPT_NEW_VERSION3_HALFPOINTS = """ 
+You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0–3 **or half-points**) for each question and provide a detailed analysis to justify your score.
+
+⚠️ SCORING RULES:
+You may assign **half-point scores (e.g., 0.5, 1.5, 2.5)** when the **top two score probabilities are within 10 percentage points (0.10)**. This accounts for uncertainty or borderline quality in PAD content.
+
+**Examples:**
+- Probabilities: score 1 [0.45], score 2 [0.43] → Score: 1.5  
+- Probabilities: score 2 [0.40], score 3 [0.39] → Score: 2.5
+
+✅ Always ensure the **sum of all four probabilities equals 1.00**
+
+---
+
+### Output Format
+For each characteristic, provide:
+- Guiding Question: [Question]
+- Analysis: [Detailed analysis of how the PAD addresses the question]
+- Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]
+- Score: [0–3 or half-point]
+
+At the end, provide:
+- Total Score: Sum of all scores (including any half-points)
+- Summary: A concise reflection on the PAD’s FCV sensitivity
+
+###############################
+# Begin FCV Protocol
+###############################
+
+Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery  
+Revised Guiding Question:  
+Does the PAD recognize FCV as a key risk in both the background and key risks sections, and identify specific pathways through which climate impacts (e.g., floods, droughts, storms) interact with FCV dynamics (e.g., resource scarcity, governance challenges, social tensions)?
+
+Core Issues to Consider:  
+The PAD should acknowledge FCV‑related risks in its background and key risks sections, indicating that FCV may impede project delivery. Higher scores require clear, context‑specific descriptions of how particular climate events translate into FCV pressures.
+
+Scoring Details:  
+Score 0: No meaningful mention of FCV risks.  
+Score 1: Acknowledges FCV risks briefly or indirectly.  
+Score 2: Mentions FCV risks and generic pathways.  
+Score 3: Provides detailed, context-specific causal links.
+
+Key Sections to Review:  
+Background/Context; Key Risks and Implementation Arrangements
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation  
+
+2A. Preventing Maladaptation in Project Interventions  
+Revised Guiding Question 2A:  
+Does the PAD describe measures or actions that ensure project interventions do not exacerbate FCV‑related vulnerabilities or create new sources of tension?
+
+Core Issues to Consider:  
+The PAD should indicate that it has considered measures to prevent harm to FCV‑sensitive groups. Higher scores require clear, context‑specific actions, including plans for monitoring and adjustment.
+
+Scoring Details:  
+Score 0: No mention of FCV mitigation.  
+Score 1: Acknowledgment only, vague or implied.  
+Score 2: Basic measures, low detail.  
+Score 3: Clear mitigation plan with mechanisms.
+
+Key Sections to Review:  
+Key Risks and Mitigation Measures; Implementation Arrangements; Social Safeguards
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+2B. Adaptive Project Design  
+Revised Guiding Question 2B:  
+To what extent does the PAD incorporate adaptive mechanisms that balance short‑term needs with long‑term resilience in an FCV setting?
+
+Core Issues to Consider:  
+The PAD should show awareness that FCV conditions can evolve. Higher scores require detailed, scenario‑based or contingency plans specifying how the project will adjust under different FCV scenarios.
+
+Scoring Details:  
+Score 0: No adaptation mechanisms.  
+Score 1: Generic or implied reference.  
+Score 2: Acknowledges need and includes general mechanisms.  
+Score 3: Includes detailed scenario-based adaptation.
+
+Key Sections to Review:  
+Implementation Arrangements; Key Risks and Mitigation Measures; Sustainability/Long-Term Planning
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding  
+Revised Guiding Question:  
+Does the PAD include interventions that explicitly address the root causes of FCV (e.g., inequitable resource access, weak governance) and seek to promote peacebuilding activities (directly or indirectly) where relevant?
+
+Core Issues to Consider:  
+The PAD should identify FCV root causes in the Country and Institutional Context. Higher scores require, where relevant, concrete steps to foster dialogue, trust, or social cohesion alongside climate interventions.
+
+Scoring Details:  
+Score 0: Root causes not identified.  
+Score 1: Acknowledges issues, no peacebuilding actions.  
+Score 2: Identifies causes, hints at peacebuilding.  
+Score 3: Detailed strategy addressing both causes and peacebuilding.
+
+Key Sections to Review:  
+Country Context; Sectoral and Institutional Context; Project Components
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups  
+Revised Guiding Question:  
+Does the PAD identify vulnerable populations at risk of FCV (e.g., women, displaced persons, minorities) and propose targeted interventions to address inequalities and ensure equitable benefit sharing?
+
+Core Issues to Consider:  
+The PAD should meaningfully identify vulnerable groups and their FCV‑related needs. Higher scores require robust, targeted strategies—such as social impact assessments or grievance mechanisms—to actively redress inequalities.
+
+Scoring Details:  
+Score 0: No identification of vulnerable groups.  
+Score 1: Implied or vague mentions, no action.  
+Score 2: Identifies groups, suggests broad measures.  
+Score 3: Clearly addresses needs with detailed interventions.
+
+Key Sections to Review:  
+Country Context; Social Sections (including Safeguards); Project Beneficiaries; Results Framework and Monitoring
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors  
+Revised Guiding Question:  
+Does the PAD engage a diverse range of actors (especially beyond government) and outline coordination mechanisms to prevent mandate duplication and foster cross‑sector collaboration?
+
+Core Issues to Consider:  
+The PAD should provide evidence of stakeholder engagement. Higher scores require formal structures—such as joint working groups or integrated frameworks—that actively coordinate across sectors.
+
+Scoring Details:  
+Score 0: No engagement or coordination mentioned.  
+Score 1: Mentions engagement, lacks detail.  
+Score 2: Basic coordination mechanisms.  
+Score 3: Formal structures for active cross-sector collaboration.
+
+Key Sections to Review:  
+Sectoral and Institutional Context; Implementation Arrangements; Key Risks and Mitigation Measures; Social Safeguards; Implementation Support Plan
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Overall FCV Sensitivity Score  
+Total Score: Sum of the five characteristic scores (including any half-points)  
+Summary: A concise reflection on the PAD’s overall FCV sensitivity, noting where the PAD demonstrates basic acknowledgment (Score 1), meaningful engagement (Score 2), and in‑depth treatment (Score 3), as well as any gaps needing attention.
+"""
+PROMPT_NEW_HALFPOINTS = """You are an expert in Fragility, Conflict, and Violence (FCV) Sensitivity Assessment. Your task is to evaluate a Project Appraisal Document (PAD) based on the FCV-Sensitivity Assessment Protocol. Analyze the provided document text and answer the following guiding questions for each of the five characteristics. Assign a score (0-3) for each question and provide a detailed analysis to justify your score.
+
+⚠️ SCORING GUIDANCE:
+You may assign half-point scores (e.g., 0.5, 1.5, 2.5) **when the two most probable scores have probabilities within 10 percentage points** (0.10). This allows scores to reflect model uncertainty and borderline cases more accurately.
+
+**Examples:**
+- Probabilities: score 1 [0.45], score 2 [0.43] → Score: 1.5
+- Probabilities: score 2 [0.4], score 3 [0.39] → Score: 2.5
+
+If no close pairing exists, assign the score with the highest probability.
+
+Ensure the **sum of all four probabilities = 1.00** for each guiding question.
+
+---
+
+Output Format: [Give the output only in the format below]
+For each characteristic or sub-question, provide:
+- Guiding Question: [Question]
+- Analysis: [Detailed analysis of how the PAD addresses the question]
+- Probabilities: score 0 [probability], score 1 [probability], score 2 [probability], score 3 [probability]
+- Score: [0–3 or half-point value]
+
+At the end, provide:
+- Summary: [Brief summary of the PAD's FCV sensitivity]
+
+---
+
+Characteristic 1: Consider How Interactions Between Climate & FCV Affect Program Delivery  
+Revised Guiding Question: Does the PAD recognize FCV as a key risk in both the background and key risks sections, and does it identify specific pathways through which climate impacts (e.g., floods, droughts, storms) interact with FCV dynamics (e.g., resource scarcity, governance challenges, social tensions)?
+
+[Scoring details and key sections as in original]
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or 0.5, 1.5, 2.5]
+
+---
+
+Characteristic 2: Mitigate the Risk of Climate Actions Resulting in Maladaptation  
+2A. Preventing Maladaptation in Project Interventions  
+Revised Guiding Question 2A: Does the PAD describe specific measures or actions that ensure project interventions do not exacerbate FCV-related vulnerabilities or create new sources of tension?
+
+[Scoring details and key sections as in original]
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+2B. Adaptive Project Design  
+Revised Guiding Question 2B: To what extent does the PAD incorporate adaptive mechanisms in project design that balance short-term needs with long-term resilience building in an FCV setting?
+
+[Scoring details and key sections as in original]
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Characteristic 3: Prioritize Climate Actions That Address FCV Root Causes & Enhance Peacebuilding  
+Revised Guiding Question: Does the PAD include interventions that explicitly address the root causes of FCV (such as inequitable access to resources or weak governance) and seek to promote activities related to peacebuilding (directly or indirectly) where relevant?
+
+[Scoring details and key sections as in original]
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Characteristic 4: Prioritize the Needs and Capacities of Vulnerable Regions and Groups  
+Revised Guiding Question: Does the PAD identify vulnerable populations at risk of FCV (such as women, displaced persons, and minorities) and actively propose measures to address inequalities through targeted interventions and equitable benefit sharing?
+
+[Scoring details and key sections as in original]
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Characteristic 5: Encourage Coordination Across Development, DRM, & Peacebuilding Actors  
+Revised Guiding Question: Does the PAD engage with a diverse range of stakeholders (especially beyond government) and outline mechanisms to prevent mandate duplication while ensuring active coordination among humanitarian, peacebuilding, and disaster risk management actors?
+
+[Scoring details and key sections as in original]
+
+Analysis: [Your analysis here]  
+Probabilities: score 0 [ ], score 1 [ ], score 2 [ ], score 3 [ ]  
+Score: [0–3 or half-point]
+
+---
+
+Overall FCV Sensitivity Score  
+Total Score: [Sum of scores for all characteristics and sub-questions, including half-point scores]
+
+Summary:  
+Provide a brief reflection on the PAD’s overall strengths and weaknesses in incorporating FCV-sensitive measures. Your summary should highlight how well the document integrates:
+- Risk identification
+- Preventive and adaptive project design
+- Root cause addressing and peacebuilding
+- Equity for vulnerable groups
+- Cross-sector coordination
+
+Note areas needing improvement if relevant.
+"""
+
 ALL_PROMPTS = {
     # "Prompt 1": PROMPT_1,
     # "Prompt 2": PROMPT_2,
@@ -1921,5 +2194,8 @@ ALL_PROMPTS = {
     "PROMPT NEW Version2": PROMPT_NEW_VERSION2,
     "PROMPT NEW Version3": PROMPT_NEW_VERSION3,
     "PROMPT NEW VERSION4" : PROMPT_4_PROBS_HALFPOINTS,
+    "PROMPT NEW VERSION5":PROMPT_NEW_VERSION3_HALFPOINTS,
+    "PROMPT NEW VERSION6": PROMPT_NEW_HALFPOINTS,
+
     
 }
