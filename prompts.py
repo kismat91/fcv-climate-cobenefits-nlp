@@ -2179,15 +2179,7 @@ Sectoral and Institutional Context, Institutional and Implementation Arrangement
 **Total Score:** [Sum of scores for all characteristics and sub-questions, including half-points]
 
 **Summary:**  
-Provide a brief reflection on the PAD’s overall strengths and weaknesses in incorporating FCV-sensitive measures. Your summary should highlight how well the document integrates:
-- Risk identification  
-- Preventive and adaptive project design  
-- Root cause addressing and peacebuilding  
-- Equity for vulnerable groups  
-- Cross-sector coordination  
-
-Also note any key areas for improvement.
-
+Provide a brief reflection on the PAD’s overall strengths and weaknesses in incorporating FCV-sensitive measures. Your summary should highlight how well the document integrates risk identification, adaptive project design (both preventive measures and adaptive mechanisms), addressing root causes with opportunities for peacebuilding, protection of vulnerable groups, and cross-sector coordination—while also noting areas for improvement. 
 """
 
 
