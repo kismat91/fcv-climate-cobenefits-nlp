@@ -447,7 +447,7 @@ def main():
     if "selected_model" not in st.session_state:
         st.session_state["selected_model"] = "gpt-4o-mini"
     if "temperature" not in st.session_state:
-        st.session_state["temperature"] = 0.8
+        st.session_state["temperature"] = 0.0
     if "max_tokens" not in st.session_state:
         st.session_state["max_tokens"] = 2000
 
