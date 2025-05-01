@@ -220,7 +220,8 @@ def analyze_with_gpt(document_text, selected_model, temperature=0.0, max_tokens=
                 {"role": "user", "content": document_text}
             ],
             temperature=temperature,
-            max_tokens=max_tokens
+            max_tokens=max_tokens,
+            seed=42
         )
         output_text = response.choices[0].message.content
     except Exception as e:
