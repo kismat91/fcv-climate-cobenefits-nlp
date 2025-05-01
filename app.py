@@ -200,7 +200,7 @@ def parse_uploaded_file(uploaded_file):
             return uploaded_file.read().decode("utf-8", errors="replace")
     return None
 
-def analyze_with_gpt(document_text, selected_model, temperature=0.8, max_tokens=3000):
+def analyze_with_gpt(document_text, selected_model, temperature=0.0, max_tokens=3000):
     """
     Analyze the provided document_text using OpenAI GPT, based on the current protocol
     stored in st.session_state["protocol"].
