@@ -493,13 +493,25 @@ def extract_report_content(llm_output: str):
             }
 
             # Get all indices (scores) with the maximum probability
-            max_prob = max(probs)
-            max_score = probs.index(max_prob)
+            #max_prob = max(probs)
+            #max_score = probs.index(max_prob)
+
+            #output[characteristic][-1]['probabilities'] = probs_dict
+            #output[characteristic][-1]['score'] = max_score
+            #total_score += max_score
+            #continue
+
+            sorted_probs = sorted(enumerate(probs), key=lambda x: x[1], reverse=True)
+            (score1, prob1), (score2, prob2) = sorted_probs[:2]
+            if abs(prob1 - prob2) <= 0.10:
+                final_score = (score1 + score2) / 2
+            else:
+                final_score = score1
 
             output[characteristic][-1]['probabilities'] = probs_dict
-            output[characteristic][-1]['score'] = max_score
-            total_score += max_score
-            continue
+            output[characteristic][-1]['score'] = final_score
+            total_score += final_score
+
 
         # Match overall summary (on the same line or subsequent lines)
         if "Overall Summary" in line:
