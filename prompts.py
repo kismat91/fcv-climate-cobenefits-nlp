@@ -2197,13 +2197,13 @@ ALL_PROMPTS = {
     "Prompt 2 (Log probability)": PROMPT_2_LOG,
     "Prompt 4 (Important sections with logprobability)": PROMPT_4_IMP_LOG,
     "Prompt 2 (Important sections with logprobability)": PROMPT_2_IMP_LOG,
-    "Prompt 4 (Probabilities)": PROMPT_4_PROBS,
-    "Prompt new": PROMPT_NEW,
+    "Prompt 1": PROMPT_4_PROBS,
+    "Prompt 2": PROMPT_NEW,
     "PROMPT NEW Version2": PROMPT_NEW_VERSION2,
-    "PROMPT NEW Version3": PROMPT_NEW_VERSION3,
-    "PROMPT NEW VERSION4" : PROMPT_4_PROBS_HALFPOINTS,
-    "PROMPT NEW VERSION5":PROMPT_NEW_VERSION3_HALFPOINTS,
-    "PROMPT NEW VERSION6": PROMPT_NEW_HALFPOINTS,
+    "PROMPT 3": PROMPT_NEW_VERSION3,
+    "PROMPT 1.5" : PROMPT_4_PROBS_HALFPOINTS,
+    "PROMPT 3.5":PROMPT_NEW_VERSION3_HALFPOINTS,
+    "PROMPT 2.5": PROMPT_NEW_HALFPOINTS,
 
     
 }
